@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:restaurantflutter/widgets/speciality_item.dart';
 
 import 'constants.dart';
+import 'widgets/other_food_items.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,16 +51,16 @@ class HomePage extends StatelessWidget {
         ),
         actions: [
           Icon(Icons.fastfood_sharp),
-          SizedBox(width: 15),
-          Icon(CupertinoIcons.rectangle_grid_2x2_fill),
-          SizedBox(width: 15),
-          Icon(CupertinoIcons.add_circled_solid),
-          SizedBox(width: 15),
+          SizedBox(width: mediaQuery.width * 0.03),
+          Icon(Icons.grid_view),
+          SizedBox(width: mediaQuery.width * 0.03),
+          Icon(Icons.add_circle),
+          SizedBox(width: mediaQuery.width * 0.03),
           Icon(Icons.edit),
-          SizedBox(width: 15),
+          SizedBox(width: mediaQuery.width * 0.03),
         ],
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(75),
+          preferredSize: Size.fromHeight(mediaQuery.height/9),
           child: Column(
             children: [
               Row(
@@ -86,12 +88,12 @@ class HomePage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    child: Row(
-                      children: [
-                        Icon(CupertinoIcons.search),
-                        SizedBox(width: 5),
-                        Text('Search'),
-                      ],
+                    child: TextField(
+                      decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.search),
+                          hintText: 'Search',
+                          border: InputBorder.none
+                      ),
                     ),
                   ),
                   Expanded(
@@ -152,197 +154,11 @@ class HomePage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 5, right: 10),
                 itemCount: 3,
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (ctx, index) => Container(
-                  margin: EdgeInsets.only(top: 10, bottom: 10, left: 15),
-                  decoration: BoxDecoration(
-                    color: Color(0xfff5f5f5),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    boxShadow: boxShadow,
-                  ),
-                  width: mediaQuery.width * 0.9,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ClipRRect(
-                        child: Image.network(
-                          'https://static.toiimg.com/thumb/56933159.cms?imgsize=686279&width=800&height=800',
-                          fit: BoxFit.cover,
-                          height: mediaQuery.height * 0.3,
-                          width: mediaQuery.width * 0.275,
-                        ),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10.0),
-                          bottomLeft: Radius.circular(10.0),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xfff5f5f5),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.white,
-                                offset: Offset(-3, -3),
-                                blurRadius: 4,
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Salad",
-                                      style: TextStyle(fontSize: 20),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    SizedBox(height: 5),
-                                    Text(
-                                      "Description",
-                                      style: TextStyle(fontSize: 13),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Container(
-                        width: 90,
-                        alignment: Alignment.center,
-                        height: 120,
-                        child: Text(
-                          "238 Rs.",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.bottomLeft,
-                            end: Alignment.topRight,
-                            colors: <Color>[
-                              Color(0xFFFF7D55),
-                              Color(0xFFF4197E),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
+                itemBuilder: (ctx, index) => SpecialityItem(),
+              )
             ),
             Divider(thickness: 1, indent: 20, endIndent: 20),
-            Container(
-              height: 5 * 125.0,
-              child: ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                padding: const EdgeInsets.only(top: 5, right: 15),
-                itemCount: 5,
-                itemBuilder: (ctx, index) => Container(
-                  margin: EdgeInsets.only(top: 10, bottom: 10, left: 15),
-                  decoration: BoxDecoration(
-                    color: Color(0xfff5f5f5),
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    boxShadow: boxShadow,
-                  ),
-                  width: mediaQuery.width * 0.9,
-                  height: 104,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ClipRRect(
-                        child: Image.network(
-                          'https://punampaul.com/wp-content/uploads/2020/03/Veg-Toast-Sandwich.jpg',
-                          fit: BoxFit.cover,
-                          height: mediaQuery.height * 0.3,
-                          width: mediaQuery.width * 0.275,
-                        ),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10.0),
-                          bottomLeft: Radius.circular(10.0),
-                        ),
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xfff5f5f5),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.white,
-                                offset: Offset(-3, -3),
-                                blurRadius: 4,
-                              ),
-                            ],
-                          ),
-                          child: Row(
-                            children: [
-                              SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "SandWich",
-                                      style: TextStyle(fontSize: 20),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    SizedBox(height: 5),
-                                    Text(
-                                      "Description",
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
-                      Container(
-                        width: 90,
-                        alignment: Alignment.center,
-                        height: 120,
-                        child: Text(
-                          '238 Rs.',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          color: Color(0xff1c2843),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            OtherFoodItems(),
           ],
         ),
       ),
