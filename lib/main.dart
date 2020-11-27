@@ -1,117 +1,351 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'constants.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
+    (value) => runApp(
+      MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Foodito',
+      home: HomePage(),
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        fontFamily: 'Roboto',
+        iconTheme: IconThemeData(
+          color: Color(0xff1c2843),
+        ),
+        primaryIconTheme: IconThemeData(
+          color: Color(0xff1c2843),
+        ),
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    final mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: Color(0xfff5f5f5),
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        elevation: 0,
+        centerTitle: false,
+        backgroundColor: Color(0xfff5f5f5),
+        title: Text(
+          'Foodito',
+          style: TextStyle(color: Color(0xff1c2843), fontSize: 30),
+        ),
+        actions: [
+          Icon(Icons.fastfood_sharp),
+          SizedBox(width: 15),
+          Icon(CupertinoIcons.rectangle_grid_2x2_fill),
+          SizedBox(width: 15),
+          Icon(CupertinoIcons.add_circled_solid),
+          SizedBox(width: 15),
+          Icon(Icons.edit),
+          SizedBox(width: 15),
+        ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(75),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Container(
+                    width: mediaQuery.width * 0.55,
+                    height: 50,
+                    padding: EdgeInsets.only(left: 15),
+                    margin: EdgeInsets.only(left: 15),
+                    decoration: BoxDecoration(
+                      color: Color(0xfff5f5f5),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(30),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xffe6e6e6),
+                          offset: Offset(3, 3),
+                          blurRadius: 4,
+                        ),
+                        BoxShadow(
+                          color: Color(0xfffcfcfc),
+                          offset: Offset(-3, -3),
+                          blurRadius: 4,
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(CupertinoIcons.search),
+                        SizedBox(width: 5),
+                        Text('Search'),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      height: 50,
+                      padding: EdgeInsets.only(left: 15),
+                      margin: EdgeInsets.only(right: 15, left: 15),
+                      decoration: BoxDecoration(
+                        color: Color(0xfff5f5f5),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(30),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0xffe6e6e6),
+                            offset: Offset(3, 3),
+                            blurRadius: 4,
+                          ),
+                          BoxShadow(
+                            color: Color(0xfffcfcfc),
+                            offset: Offset(-3, -3),
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.filter_alt),
+                          SizedBox(width: 5),
+                          Text('Filter'),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+            ],
+          ),
+        ),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0, top: 10),
+              child: Text(
+                'Our Speciality',
+                style: TextStyle(color: Color(0xff1c2843), fontSize: 17),
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+            Container(
+              height: 130,
+              child: ListView.builder(
+                physics: BouncingScrollPhysics(),
+                padding: const EdgeInsets.only(top: 5, right: 10),
+                itemCount: 3,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (ctx, index) => Container(
+                  margin: EdgeInsets.only(top: 10, bottom: 10, left: 15),
+                  decoration: BoxDecoration(
+                    color: Color(0xfff5f5f5),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    boxShadow: boxShadow,
+                  ),
+                  width: mediaQuery.width * 0.9,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ClipRRect(
+                        child: Image.network(
+                          'https://static.toiimg.com/thumb/56933159.cms?imgsize=686279&width=800&height=800',
+                          fit: BoxFit.cover,
+                          height: mediaQuery.height * 0.3,
+                          width: mediaQuery.width * 0.275,
+                        ),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10.0),
+                          bottomLeft: Radius.circular(10.0),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xfff5f5f5),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.white,
+                                offset: Offset(-3, -3),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Salad",
+                                      style: TextStyle(fontSize: 20),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      "Description",
+                                      style: TextStyle(fontSize: 13),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 90,
+                        alignment: Alignment.center,
+                        height: 120,
+                        child: Text(
+                          "238 Rs.",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomLeft,
+                            end: Alignment.topRight,
+                            colors: <Color>[
+                              Color(0xFFFF7D55),
+                              Color(0xFFF4197E),
+                            ],
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            Divider(thickness: 1, indent: 20, endIndent: 20),
+            Container(
+              height: 5 * 125.0,
+              child: ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.only(top: 5, right: 15),
+                itemCount: 5,
+                itemBuilder: (ctx, index) => Container(
+                  margin: EdgeInsets.only(top: 10, bottom: 10, left: 15),
+                  decoration: BoxDecoration(
+                    color: Color(0xfff5f5f5),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    boxShadow: boxShadow,
+                  ),
+                  width: mediaQuery.width * 0.9,
+                  height: 104,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ClipRRect(
+                        child: Image.network(
+                          'https://punampaul.com/wp-content/uploads/2020/03/Veg-Toast-Sandwich.jpg',
+                          fit: BoxFit.cover,
+                          height: mediaQuery.height * 0.3,
+                          width: mediaQuery.width * 0.275,
+                        ),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10.0),
+                          bottomLeft: Radius.circular(10.0),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xfff5f5f5),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.white,
+                                offset: Offset(-3, -3),
+                                blurRadius: 4,
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "SandWich",
+                                      style: TextStyle(fontSize: 20),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    SizedBox(height: 5),
+                                    Text(
+                                      "Description",
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Container(
+                        width: 90,
+                        alignment: Alignment.center,
+                        height: 120,
+                        child: Text(
+                          '238 Rs.',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                          color: Color(0xff1c2843),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
