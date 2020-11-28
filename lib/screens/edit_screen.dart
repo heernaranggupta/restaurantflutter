@@ -67,6 +67,7 @@ class _EditItemsState extends State<EditItems> {
           ),
         ),
         body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
@@ -329,7 +330,7 @@ class _EditItemsState extends State<EditItems> {
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 15),
-                  margin: EdgeInsets.only(top: 20),
+                  margin: EdgeInsets.only(top: 20,bottom: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     color: appColor,
