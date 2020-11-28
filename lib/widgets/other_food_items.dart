@@ -10,7 +10,7 @@ class OtherFoodItems extends StatelessWidget {
       height: 5 * 125.0,
       child: ListView.builder(
         physics: NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(top: 5, right: 15),
+        padding: const EdgeInsets.only(right: 20),
         itemCount: 5,
         itemBuilder: (ctx, index) => Container(
           margin: EdgeInsets.only(top: 10, bottom: 10, left: 15),
@@ -84,7 +84,7 @@ class OtherFoodItems extends StatelessWidget {
                 alignment: Alignment.center,
                 height: 120,
                 child: Text(
-                  '238 Rs.',
+                  isMenuScreen ? '238 Rs.' : 'Edit',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,

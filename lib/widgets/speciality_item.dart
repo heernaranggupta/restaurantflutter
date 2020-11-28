@@ -1,8 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../screens/edit_screen.dart';
 import '../constants.dart';
 
 class SpecialityItem extends StatelessWidget {
+  Text buildText(String title) {
+    return Text(
+      title,
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 18,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
@@ -76,13 +88,15 @@ class SpecialityItem extends StatelessWidget {
               width: 90,
               alignment: Alignment.center,
               height: 120,
-              child: Text(
-                "238 Rs.",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
-              ),
+              child: isMenuScreen
+                  ? buildText('238 Rs')
+                  : GestureDetector(
+                      child: buildText('Edit'),
+                      onTap: () {
+                        Navigator.of(context).push(
+                            CupertinoPageRoute(builder: (ctx) => EditItems()));
+                      },
+                    ),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.bottomLeft,
