@@ -8,7 +8,45 @@ class EditItems extends StatefulWidget {
 }
 
 class _EditItemsState extends State<EditItems> {
-  bool isExpanded = false;
+  bool isExpandedTiming = false;
+  bool isExpandedCategories = false;
+  var timingBoolList = [false, false, false, false];
+  var categoryBoolList = [
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false
+  ];
+  var timings = ["Morning", "Afternoon", "Evening", "Night"];
+  var category = [
+    "Vegetables",
+    "Grains",
+    "Legumes",
+    "Meat and poultry",
+    "Fish and Seafood",
+    "Dairy Foods",
+    "Eggs",
+    "Bread"
+  ];
+  Container buildContainer(String title) {
+    return Container(
+      padding: EdgeInsets.only(right: 10, left: 10),
+      margin: EdgeInsets.only(left: 10),
+      alignment: Alignment.center,
+      height: 40,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        boxShadow: boxShadowSmall,
+        color: appColor,
+      ),
+      child: Center(child: Text(title)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
@@ -29,89 +67,86 @@ class _EditItemsState extends State<EditItems> {
           ),
         ),
         body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  margin: EdgeInsets.only(top: 10, bottom: 20),
-                  decoration: BoxDecoration(
-                    color: appColor,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    boxShadow: boxShadow,
-                  ),
-                  height: 104,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ClipRRect(
+                Row(
+                  children: [
+                    Container(
+                      height: 104,
+                      margin: EdgeInsets.only(top: 10, bottom: 10),
+                      decoration: BoxDecoration(
+                        color: appColor,
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        boxShadow: boxShadow,
+                      ),
+                      child: ClipRRect(
                         child: Image.network(
                           'https://punampaul.com/wp-content/uploads/2020/03/Veg-Toast-Sandwich.jpg',
                           fit: BoxFit.cover,
                           height: mediaQuery.height * 0.3,
-                          width: mediaQuery.width * 0.3,
+                          width: mediaQuery.width * 0.275,
                         ),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10.0),
-                          bottomLeft: Radius.circular(10.0),
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
                       ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topRight: Radius.circular(10.0),
-                              bottomRight: Radius.circular(10.0),
-                            ),
-                            color: appColor,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.white,
-                                offset: Offset(-3, -3),
-                                blurRadius: 4,
-                              ),
-                            ],
-                          ),
-                          child: Row(
+                    ),
+                    SizedBox(width: 5),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          Row(
                             children: [
-                              SizedBox(width: 10),
                               Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "SandWich",
-                                      style: TextStyle(fontSize: 20),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
-                                ),
+                                child: buildContainer('Special'),
                               ),
-                              SizedBox(width: 10),
+                              Expanded(
+                                child: buildContainer('Count'),
+                              ),
+                              Expanded(
+                                child: buildContainer('Veg'),
+                              ),
                             ],
                           ),
-                        ),
+                          SizedBox(height: 15),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: buildContainer('General'),
+                              ),
+                              Expanded(
+                                child: buildContainer('Quantity'),
+                              ),
+                              Expanded(
+                                child: buildContainer('Non Veg'),
+                              )
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    )
+                  ],
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  margin: EdgeInsets.only(bottom: 20),
+                  height: 55,
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(bottom: 20, top: 10),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    boxShadow: boxShadowSmall,
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
                     color: appColor,
-                    boxShadow: boxShadow,
                   ),
                   child: TextField(
-                    maxLines: 4,
                     cursorColor: fontColor,
                     decoration: InputDecoration(
-                      hintText: 'Short Description',
+                      hintText: 'Name',
                       hintStyle: TextStyle(fontSize: 16),
+                      prefixIcon: Icon(
+                        Icons.fastfood_sharp,
+                        color: fontColor,
+                      ), //Temporary Doller Icon
                       border: InputBorder.none,
                     ),
                   ),
@@ -121,7 +156,7 @@ class _EditItemsState extends State<EditItems> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
-                    boxShadow: boxShadow,
+                    boxShadow: boxShadowSmall,
                     borderRadius: BorderRadius.all(Radius.circular(25.0)),
                     color: appColor,
                   ),
@@ -141,9 +176,9 @@ class _EditItemsState extends State<EditItems> {
                 ),
                 Stack(
                   children: [
-                    if (isExpanded)
+                    if (isExpandedTiming)
                       Container(
-                        height: 125,
+                        height: 200,
                         width: mediaQuery.width,
                         decoration: BoxDecoration(
                           boxShadow: boxShadow,
@@ -155,14 +190,31 @@ class _EditItemsState extends State<EditItems> {
                           ),
                           color: appColor,
                         ),
-                        child: Column(
-                          children: [
-                            SizedBox(height: 60),
-                            Text('Morning'),
-                            Text('Afternoon'),
-                            Text('Evening'),
-                            Text('Night'),
-                          ],
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.only(top: 50),
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return SizedBox(
+                              height: 32,
+                              child: CheckboxListTile(
+                                controlAffinity:
+                                    ListTileControlAffinity.leading,
+                                activeColor: Color(0xff1c2843),
+                                title: Text(
+                                  timings[index],
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                                value: timingBoolList[index],
+                                onChanged: (value) {
+                                  setState(() {
+                                    timingBoolList[index] = value;
+                                  });
+                                },
+                              ),
+                            );
+                          },
+                          itemCount: timingBoolList.length,
                         ),
                       ),
                     Container(
@@ -170,14 +222,14 @@ class _EditItemsState extends State<EditItems> {
                       height: 55,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        boxShadow: boxShadow,
+                        boxShadow: boxShadowSmall,
                         borderRadius: BorderRadius.all(Radius.circular(25.0)),
                         color: appColor,
                       ),
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
-                            isExpanded = !isExpanded;
+                            isExpandedTiming = !isExpandedTiming;
                           });
                         },
                         child: Row(
@@ -197,6 +249,102 @@ class _EditItemsState extends State<EditItems> {
                       ),
                     ),
                   ],
+                ),
+                Stack(
+                  children: [
+                    if (isExpandedCategories)
+                      Container(
+                        margin: EdgeInsets.only(top: 20),
+                        height: 330,
+                        width: mediaQuery.width,
+                        decoration: BoxDecoration(
+                          boxShadow: boxShadow,
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(10.0),
+                            bottomLeft: Radius.circular(10.0),
+                            topLeft: Radius.circular(25.0),
+                            topRight: Radius.circular(25.0),
+                          ),
+                          color: appColor,
+                        ),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          padding: EdgeInsets.only(top: 50),
+                          physics: NeverScrollableScrollPhysics(),
+                          itemCount: category.length,
+                          itemBuilder: (context, index) {
+                            return SizedBox(
+                              height: 32,
+                              child: CheckboxListTile(
+                                controlAffinity:
+                                    ListTileControlAffinity.leading,
+                                activeColor: Color(0xff1c2843),
+                                title: Text(
+                                  category[index],
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                                value: categoryBoolList[index],
+                                onChanged: (value) {
+                                  setState(() {
+                                    categoryBoolList[index] = value;
+                                  });
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    Container(
+                      margin: EdgeInsets.only(top: 20),
+                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      height: 55,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        boxShadow: boxShadowSmall,
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                        color: appColor,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isExpandedCategories = !isExpandedCategories;
+                          });
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(Icons.grid_view, color: fontColor),
+                                SizedBox(width: 13),
+                                Text('Category'),
+                              ],
+                            ),
+                            Icon(Icons.arrow_drop_down,
+                                color: fontColor, size: 35),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                  margin: EdgeInsets.only(top: 20,bottom: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    color: appColor,
+                    boxShadow: boxShadowSmall,
+                  ),
+                  child: TextField(
+                    maxLines: 4,
+                    cursorColor: fontColor,
+                    decoration: InputDecoration(
+                      hintText: 'Short Description',
+                      hintStyle: TextStyle(fontSize: 16),
+                      border: InputBorder.none,
+                    ),
+                  ),
                 ),
               ],
             ),

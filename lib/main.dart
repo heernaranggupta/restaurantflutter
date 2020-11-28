@@ -109,18 +109,7 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.all(
                           Radius.circular(30),
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0xffe6e6e6),
-                            offset: Offset(3, 3),
-                            blurRadius: 4,
-                          ),
-                          BoxShadow(
-                            color: Color(0xfffcfcfc),
-                            offset: Offset(-3, -3),
-                            blurRadius: 4,
-                          ),
-                        ],
+                        boxShadow: boxShadowSmall,
                       ),
                       child: TextField(
                         cursorColor: fontColor,
@@ -141,18 +130,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.all(
                             Radius.circular(30),
                           ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0xffe6e6e6),
-                              offset: Offset(3, 3),
-                              blurRadius: 4,
-                            ),
-                            BoxShadow(
-                              color: Color(0xfffcfcfc),
-                              offset: Offset(-3, -3),
-                              blurRadius: 4,
-                            ),
-                          ],
+                          boxShadow: boxShadowSmall,
                         ),
                         child: Row(
                           children: [
