@@ -88,7 +88,7 @@ class SpecialityItem extends StatelessWidget {
               width: 90,
               alignment: Alignment.center,
               height: 120,
-              child: isMenuScreen
+              child: !isEditScreen
                   ? buildText('238 Rs')
                   : GestureDetector(
                       child: buildText('Edit'),

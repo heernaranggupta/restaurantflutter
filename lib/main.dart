@@ -33,7 +33,6 @@ class MyApp extends StatelessWidget {
           iconTheme: IconThemeData(
             color: Color(0xff1c2843),
           ),
-          
         ),
       ),
     );
@@ -68,12 +67,17 @@ class _HomePageState extends State<HomePage> {
             GestureDetector(
                 child: Icon(Icons.fastfood_sharp),
                 onTap: () {
-                  if (isMenuScreen == false) {
-                    setState(() {
-                      isMenuScreen = true;
+                  // if (isMenuScreen == false) {
+                  //   setState(() {
+                  //     isMenuScreen = true;
+                  //     isEditScreen = false;
+                  //   });
+                  // }
+                  setState(() {
+                    if (isEditScreen) {
                       isEditScreen = false;
-                    });
-                  }
+                    }
+                  });
                 }),
             buildSizedBox(mediaQuery),
             GestureDetector(child: Icon(Icons.grid_view), onTap: () {}),
@@ -83,12 +87,20 @@ class _HomePageState extends State<HomePage> {
             GestureDetector(
                 child: Icon(Icons.edit),
                 onTap: () {
-                  if (isEditScreen == false) {
-                    setState(() {
-                      isMenuScreen = false;
-                      isEditScreen = true;
-                    });
-                  }
+                  // if (isEditScreen == false) {
+                  //   setState(() {
+                  //     isMenuScreen = false;
+                  //     isEditScreen = true;
+                  //   });
+                  // } else if (isEditScreen == true) {
+                  //   setState(() {
+                  //     isMenuScreen = true;
+                  //     isEditScreen = false;
+                  //   });
+                  // }
+                  setState(() {
+                    isEditScreen = !isEditScreen;
+                  });
                 }),
             buildSizedBox(mediaQuery),
           ],

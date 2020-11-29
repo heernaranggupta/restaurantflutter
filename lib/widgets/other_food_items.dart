@@ -84,7 +84,7 @@ class OtherFoodItems extends StatelessWidget {
                 alignment: Alignment.center,
                 height: 120,
                 child: Text(
-                  isMenuScreen ? '238 Rs.' : 'Edit',
+                  !isEditScreen ? '238 Rs.' : 'Edit',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,

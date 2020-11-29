@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 const appColor = Color(0xfff5f5f5);
 const fontColor = Color(0xff1c2843);
 
-bool isMenuScreen = true;
+// bool isMenuScreen = true;
 bool isEditScreen = false;
 
 const List<BoxShadow> boxShadowSmall = const [
