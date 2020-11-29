@@ -43,7 +43,11 @@ class _EditItemsState extends State<EditItems> {
         boxShadow: boxShadowSmall,
         color: appColor,
       ),
-      child: Center(child: Text(title)),
+      child: FittedBox(
+          child: Text(
+        title,
+        style: TextStyle(fontSize: 11),
+      )),
     );
   }
 
@@ -230,6 +234,9 @@ class _EditItemsState extends State<EditItems> {
                         onTap: () {
                           setState(() {
                             isExpandedTiming = !isExpandedTiming;
+                            if (isExpandedCategories) {
+                              isExpandedCategories = false;
+                            }
                           });
                         },
                         child: Row(
@@ -242,8 +249,12 @@ class _EditItemsState extends State<EditItems> {
                                 Text('Timing'),
                               ],
                             ),
-                            Icon(Icons.arrow_drop_down,
-                                color: fontColor, size: 35),
+                            Icon(
+                                !isExpandedTiming
+                                    ? Icons.arrow_drop_down
+                                    : Icons.arrow_drop_up,
+                                color: fontColor,
+                                size: 35),
                           ],
                         ),
                       ),
@@ -308,6 +319,9 @@ class _EditItemsState extends State<EditItems> {
                         onTap: () {
                           setState(() {
                             isExpandedCategories = !isExpandedCategories;
+                            if (isExpandedTiming) {
+                              isExpandedTiming = false;
+                            }
                           });
                         },
                         child: Row(
@@ -320,8 +334,12 @@ class _EditItemsState extends State<EditItems> {
                                 Text('Category'),
                               ],
                             ),
-                            Icon(Icons.arrow_drop_down,
-                                color: fontColor, size: 35),
+                            Icon(
+                                !isExpandedCategories
+                                    ? Icons.arrow_drop_down
+                                    : Icons.arrow_drop_up,
+                                color: fontColor,
+                                size: 35),
                           ],
                         ),
                       ),
@@ -330,13 +348,14 @@ class _EditItemsState extends State<EditItems> {
                 ),
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 15),
-                  margin: EdgeInsets.only(top: 20,bottom: 20),
+                  margin: EdgeInsets.only(top: 20, bottom: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     color: appColor,
                     boxShadow: boxShadowSmall,
                   ),
                   child: TextField(
+                    scrollPhysics: BouncingScrollPhysics(),
                     maxLines: 4,
                     cursorColor: fontColor,
                     decoration: InputDecoration(
