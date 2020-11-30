@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:restaurantflutter/constants.dart';
+import 'package:orderingsystem/constants.dart';
 
 class EditItems extends StatefulWidget {
   @override

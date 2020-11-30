@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,9 +6,11 @@ import 'package:flutter/services.dart';
 import './constants.dart';
 import './widgets/speciality_item.dart';
 import './widgets/other_food_items.dart';
+import 'FormToAdd.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(
       MyApp(),
@@ -82,7 +85,10 @@ class _HomePageState extends State<HomePage> {
             buildSizedBox(mediaQuery),
             GestureDetector(child: Icon(Icons.grid_view), onTap: () {}),
             buildSizedBox(mediaQuery),
-            GestureDetector(child: Icon(Icons.add_circle), onTap: () {}),
+            GestureDetector(child: Icon(Icons.add_circle), onTap: () {
+              Navigator.of(context).push(
+                  CupertinoPageRoute(builder: (ctx) => FormToAddFoodItems()));
+            }),
             buildSizedBox(mediaQuery),
             GestureDetector(
                 child: Icon(Icons.edit),

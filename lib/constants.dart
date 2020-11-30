@@ -33,3 +33,17 @@ const List<BoxShadow> boxShadow = const [
     blurRadius: 5,
   ),
 ];
+const List<BoxShadow> boxShadowTwo = const [
+//color: Colors.white, //background color of box
+BoxShadow(
+  color: Color(0xFFE0E0E0),
+  blurRadius: 2.0,
+  offset: Offset(3.0, 3.0),
+),
+    BoxShadow(
+color: Colors.white,
+blurRadius: 2.0,
+offset: Offset(-3.0, -3.0),
+),
+];
+
