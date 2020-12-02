@@ -1,17 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:orderingsystem/models/FoodItem.dart';
 
 import '../constants.dart';
 
 class OtherFoodItems extends StatelessWidget {
+  List<FoodItem> foodItems;
+
+  OtherFoodItems({@required this.foodItems});
+
   @override
   Widget build(BuildContext context) {
+    print("actual lenth  - ${foodItems.length}");
+
     final mediaQuery = MediaQuery.of(context).size;
     return Container(
-      height: 5 * 125.0,
+      height:  foodItems.length <4 ? 3.5 * 125.0:foodItems.length * 125.0,
       child: ListView.builder(
         physics: NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.only(right: 20),
-        itemCount: 5,
+        itemCount: foodItems.length,
         itemBuilder: (ctx, index) => Container(
           margin: EdgeInsets.only(top: 10, bottom: 10, left: 15),
           decoration: BoxDecoration(
@@ -25,12 +32,18 @@ class OtherFoodItems extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ClipRRect(
-                child: Image.network(
-                  'https://punampaul.com/wp-content/uploads/2020/03/Veg-Toast-Sandwich.jpg',
-                  fit: BoxFit.cover,
-                  height: mediaQuery.height * 0.3,
-                  width: mediaQuery.width * 0.275,
-                ),
+                child: foodItems[index].imageUrl != null
+                    ? Image.network(
+                        foodItems[index].imageUrl,
+                        fit: BoxFit.cover,
+                        height: mediaQuery.height * 0.3,
+                        width: mediaQuery.width * 0.275,
+                      )
+                    : Container(
+                    child: Center(child: Text("No Image")),
+                    height: mediaQuery.height * 0.3,
+                    width: mediaQuery.width * 0.275,
+                      ),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10.0),
                   bottomLeft: Radius.circular(10.0),
@@ -57,14 +70,14 @@ class OtherFoodItems extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "SandWich",
+                              foodItems[index].foodName,
                               style: TextStyle(fontSize: 20),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(height: 5),
                             Text(
-                              "Description",
+                              foodItems[index].description,
                               style: TextStyle(
                                 fontSize: 13,
                               ),
@@ -84,7 +97,7 @@ class OtherFoodItems extends StatelessWidget {
                 alignment: Alignment.center,
                 height: 120,
                 child: Text(
-                  !isEditScreen ? '238 Rs.' : 'Edit',
+                  !isEditScreen ? "${foodItems[index].price} Rs" : 'Edit',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,

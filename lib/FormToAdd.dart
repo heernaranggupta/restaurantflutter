@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:orderingsystem/DatabaseOperation/FoodCollectionDatabase.dart';
 
 import 'constants.dart';
 import 'models/FoodItem.dart';
@@ -55,86 +56,60 @@ class _FormToAddFoodItemsState extends State<FormToAddFoodItems> {
   bool isVeg = true;
   Color themeBlueColor = Color(0xff1c2843);
   Color themeWhiteColor = Color(0xFFF5F5F5);
+  UploadTask uploadTask;
 
   // PickedFile _image;
   File _imageFile;
+  Future<String> uploadImage(var imageFile ) async {
+    Reference ref = FirebaseStorage.instance.ref().child("foods_images_uploaded/${DateTime.now()}.jpg");
+    await ref.putFile(imageFile) ;
+    return await ref.getDownloadURL();
+  }
 
-  // Future clickPicture() async {
-  //   final imagePicker = ImagePicker();
-  //   final image = await imagePicker.getImage(
-  //       source: ImageSource.camera, imageQuality: 30);
-  //   Navigator.pop(context);
-  //   setState(() {
-  //     _image = image;
-  //   });
-  // }
+  // var streamBuilder =
+
+
 
   Future chooseOrClickPicture(ImageSource source) async {
     final imagePicker = ImagePicker();
     final image = await imagePicker.getImage(
-        source: source, imageQuality: 30);
+        source: source, imageQuality: 20);
     Navigator.pop(context);
     setState(() {
-
       _imageFile = File(image.path);
     });
   }
+  Future addFoodItemToDataBase(BuildContext context) async{
 
-  Future<String> uploadImage(var imageFile ) async {
-    String url;
-    Reference ref = FirebaseStorage.instance.ref().child("foods_images_uploaded/${DateTime.now()}.jpg");
-    TaskSnapshot uploadTask = await ref.putFile(imageFile);
-    url =  await ref.getDownloadURL();
-    return url;
+    showCupertinoDialog(context: context,
+      builder: (_) => CupertinoAlertDialog(
+        title: Text("Uploading ! "),
+        content: Container(
+          child: Center(
+            child:  CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xff1c2843)),
+                ),
+            ),
+        ),
+      ),
+      barrierDismissible: false,
+    );
+    await FoodCollectionDatabase().addData(imageFile: _imageFile, priceController: priceController,isQuantitative: isQuantitative,
+        isVeg: isVeg,isSpecial: isSpecial,categoryListToDisplay: categoryListToDisplay
+        ,descriptionController: descriptionController,foodController: foodController,
+        timingsListToDisplay: timingsListToDisplay
+    );
+    Navigator.of(context, rootNavigator: true).pop();
+    Navigator.of(context).pop();
   }
 
-  Future<void> addData() async {
-    print("url-----------------------------------------");
-    var DemoReferance = firestore.collection("FoodsCollection").doc();
-    List<String> finalCategories = List();
-    List<String> finalTimings = List();
-    int j = 0;
-    for (int i = 0; i < category.length; i++) {
-      if (categoryBoolList[i] == true) {
-        finalCategories.add(category[i]);
-        // finalList[j++]=category[i];
-      }
-    }
-    j = 0;
-    for (int i = 0; i < timings.length; i++) {
-      if (timingBoolList[i] == true) {
-        finalTimings.add(timings[i]);
-        // finalList[j++]=category[i];
-      }
-    }
-
-    print("final Categories - $finalCategories \nfinal Timing - $finalTimings");
-
-    String url;
-    if(_imageFile != null)
-         url = await uploadImage(_imageFile);
-    else{
-      url="no url";
-    }
-
-    print("url- $url");
-
-
-
-    final FoodItem item = FoodItem(
-        categories: categoryListToDisplay,//finalCategories,
-        description: descriptionController.text,
-        foodId: DemoReferance.id,
-        foodName: foodController.text,
-        imageUrl: url,
-        isSpecial: isSpecial,
-        isVeg: isVeg,
-        price: priceController.text,
-        isQuantitative: isQuantitative,
-        timings: timingsListToDisplay//finalTimings
-    );
-
-    DemoReferance.set(item.toJson());
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    print("\ndata-----------------------------------------");
+    var data =  FoodCollectionDatabase().fetchData();
+    print("\ndata-----------------${data.toString()}");
   }
 
   @override
@@ -190,13 +165,14 @@ class _FormToAddFoodItemsState extends State<FormToAddFoodItems> {
           padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
           child: Container(
             width: mediaQuery.width * 0.9,
-            child: CupertinoButton(
+            child:
+            CupertinoButton(
               padding: EdgeInsets.only(top: 15, bottom: 15),
               color: Color(0xff1c2843),
               // shape: RoundedRectangleBorder(
               //     borderRadius: BorderRadius.circular(6.0),
               // ),
-              onPressed: () => addData(),
+              onPressed: () => addFoodItemToDataBase(context),//addData(),
               child: Text("Add Item"),
               pressedOpacity: 0.8,
               //textColor: Colors.white,
@@ -565,7 +541,7 @@ class _FormToAddFoodItemsState extends State<FormToAddFoodItems> {
                                 child: ListView.builder(
                                   //physics: BouncingScrollPhysics(),
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: 4,
+                                  itemCount: timings.length,
                                   itemBuilder: (BuildContext context, int index) {
                                     return SizedBox(
                                       height: 32,
@@ -768,7 +744,7 @@ class _FormToAddFoodItemsState extends State<FormToAddFoodItems> {
                                           categoryDisplayAsHint,
                                           style: TextStyle(
                                               fontSize: 14,
-                                              color: timingsListToDisplay.length == 0 ? Colors.grey[400]: themeBlueColor),
+                                              color: categoryListToDisplay.length == 0 ? Colors.grey[400]: themeBlueColor),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                           softWrap: false,

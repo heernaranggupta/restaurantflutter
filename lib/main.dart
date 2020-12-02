@@ -2,10 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:orderingsystem/models/FoodItem.dart';
+
 
 import './constants.dart';
 import './widgets/speciality_item.dart';
 import './widgets/other_food_items.dart';
+import 'DatabaseOperation/FoodCollectionDatabase.dart';
 import 'FormToAdd.dart';
 
 void main() async{
@@ -48,12 +51,39 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<FoodItem> foodItems;
   SizedBox buildSizedBox(Size mediaQuery) =>
       SizedBox(width: mediaQuery.width * 0.03);
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    fetchAllFoods();
+
+  }
+  Future<void> fetchAllFoods() async{
+    print("checkkkkkkkkk 111 ------------");
+    var foodItemsTemp =  await FoodCollectionDatabase().fetchData();
+    print("checkkkkkkkkk 2222------------${foodItemsTemp.length}");
+
+    if(foodItemsTemp == null){
+      print("------------------------\nNO DAAAAATAAAAAA\n-----------------------------");
+    }else{
+      setState(() {
+          foodItems = foodItemsTemp;
+      });
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
+
+
+    //print("checkkkkkkkkk 3333333------------${foodItems.length}");
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
@@ -166,33 +196,44 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 15.0, top: 10),
-                child: Text(
-                  'Our Speciality',
-                  style: TextStyle(color: Color(0xff1c2843), fontSize: 17),
+        body: RefreshIndicator(
+          onRefresh: fetchAllFoods,
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 15.0, top: 10),
+                  child: Text(
+                    'Our Speciality',
+                    style: TextStyle(color: Color(0xff1c2843), fontSize: 17),
+                  ),
                 ),
-              ),
-              Container(
-                  height: 130,
-                  child: ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    padding: const EdgeInsets.only(top: 5, right: 10),
-                    itemCount: 3,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (ctx, index) => SpecialityItem(),
-                  )),
-              Divider(thickness: 1, indent: 20, endIndent: 20),
-              OtherFoodItems(),
-            ],
+                Container(
+                    height: 130,
+                    child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      padding: const EdgeInsets.only(top: 5, right: 10),
+                      itemCount: 3,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (ctx, index) => SpecialityItem(),
+                    )),
+                Divider(thickness: 1, indent: 20, endIndent: 20),
+                foodItems != null?
+                OtherFoodItems(foodItems: foodItems):
+                Center(
+                  child:Text("Menu is Empty") ,
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
+
+
+
 }
