@@ -1,10 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import '../models/FoodItem.dart';
 import '../screens/edit_screen.dart';
 import '../constants.dart';
 
 class SpecialityItem extends StatelessWidget {
+  FoodItem foodItem;
+
+  SpecialityItem({@required this.foodItem});
+
+
   Text buildText(String title) {
     return Text(
       title,
@@ -32,12 +37,17 @@ class SpecialityItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ClipRRect(
-              child: Image.network(
-                'https://static.toiimg.com/thumb/56933159.cms?imgsize=686279&width=800&height=800',
+              child: foodItem.imageUrl != null ?Image.network(
+                foodItem.imageUrl,
                 fit: BoxFit.cover,
                 height: mediaQuery.height * 0.3,
                 width: mediaQuery.width * 0.275,
-              ),
+              ):
+          Container(
+            child: Center(child: Text("No Image")),
+            height: mediaQuery.height * 0.3,
+            width: mediaQuery.width * 0.275,
+          ),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(10.0),
                 bottomLeft: Radius.circular(10.0),
@@ -64,14 +74,14 @@ class SpecialityItem extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Salad",
+                            foodItem.foodName,
                             style: TextStyle(fontSize: 20),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                           SizedBox(height: 5),
                           Text(
-                            "Description",
+                            foodItem.description,
                             style: TextStyle(fontSize: 13),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -89,7 +99,7 @@ class SpecialityItem extends StatelessWidget {
               alignment: Alignment.center,
               height: 120,
               child: !isEditScreen
-                  ? buildText('238 Rs')
+                  ? buildText("${foodItem.price} Rs")
                   : GestureDetector(
                       child: buildText('Edit'),
                       onTap: () {

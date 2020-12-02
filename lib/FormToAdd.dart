@@ -184,7 +184,12 @@ class _FormToAddFoodItemsState extends State<FormToAddFoodItems> {
           centerTitle: false,
           backgroundColor: Color(0xfff5f5f5),
           actions: [
-            Icon(Icons.fastfood_sharp),
+            GestureDetector(
+                child: Icon(Icons.fastfood_sharp),
+              onTap: (){
+                Navigator.of(context).pop();
+              },
+            ),
             SizedBox(width: 15),
             Icon(
               const IconData(0xe903, fontFamily: 'newcustomfonts'),
@@ -486,9 +491,8 @@ class _FormToAddFoodItemsState extends State<FormToAddFoodItems> {
                                 TextStyle(fontSize: 14, color: Colors.grey[400]),
                             hintText: 'Food Name',
                             prefixIcon: Icon(
-                              Icons.fastfood_sharp,
-                              color: Color(0xff1c2843),
-                              size: 22,
+                              Icons.restaurant_menu,
+                              color: themeBlueColor
                             ),
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.all(10),
@@ -727,12 +731,13 @@ class _FormToAddFoodItemsState extends State<FormToAddFoodItems> {
                                   SizedBox(
                                     width: 15,
                                   ),
-                                  Icon(
-                                    const IconData(0xe903,
-                                        fontFamily: 'newcustomfonts'),
-                                    color: Color(0xff1c2843),
-                                    size: 22,
-                                  ),
+                                  Icon(Icons.calendar_view_day_outlined),
+                                  // Icon(
+                                  //   const IconData(0xe903,
+                                  //       fontFamily: 'newcustomfonts'),
+                                  //   color: Color(0xff1c2843),
+                                  //   size: 22,
+                                  // ),
                                   SizedBox(
                                     width: 10,
                                   ),

@@ -5,8 +5,9 @@ import '../constants.dart';
 
 class OtherFoodItems extends StatelessWidget {
   List<FoodItem> foodItems;
+  double appBarHeight;
 
-  OtherFoodItems({@required this.foodItems});
+  OtherFoodItems({@required this.foodItems,@required this.appBarHeight});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class OtherFoodItems extends StatelessWidget {
 
     final mediaQuery = MediaQuery.of(context).size;
     return Container(
-      height:  foodItems.length <4 ? 3.5 * 125.0:foodItems.length * 125.0,
+      height:  foodItems.length < 4 ? MediaQuery.of(context).size.height - appBarHeight - MediaQuery.of(context).padding.top:foodItems.length * 125.0,
       child: ListView.builder(
         physics: NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.only(right: 20),
@@ -67,11 +68,14 @@ class OtherFoodItems extends StatelessWidget {
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                            SizedBox(
+                              height: mediaQuery.height*0.02,
+                            ),
                             Text(
                               foodItems[index].foodName,
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(fontSize: 16),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -79,9 +83,10 @@ class OtherFoodItems extends StatelessWidget {
                             Text(
                               foodItems[index].description,
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 9,
+                                color: Colors.grey[600]
                               ),
-                              maxLines: 2,
+                              maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ],
@@ -97,7 +102,7 @@ class OtherFoodItems extends StatelessWidget {
                 alignment: Alignment.center,
                 height: 120,
                 child: Text(
-                  !isEditScreen ? "${foodItems[index].price} Rs" : 'Edit',
+                  !isEditScreen ? "${foodItems[index].price} ₹" : 'Edit',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
