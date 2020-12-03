@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class FoodItem{
   List<String> category;
   List<String> timing;

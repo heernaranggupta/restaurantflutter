@@ -2,13 +2,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:orderingsystem/models/FoodItem.dart';
 
-import './constants.dart';
 import './widgets/other_food_items.dart';
 import './widgets/speciality_item.dart';
-import 'DatabaseOperation/FoodCollectionDatabase.dart';
+import './DatabaseOperation/FoodCollectionDatabase.dart';
 import 'FormToAdd.dart';
+import './constants.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,9 +49,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<FoodItem> foodItems;
-  List<FoodItem> specialFoodItems = [];
-
   bool showFilter = false;
 
   SizedBox buildSizedBox(Size mediaQuery) =>
@@ -60,10 +56,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    super.initState();
-
     fetchAllFoods();
+
+    super.initState();
   }
 
   Future<void> fetchAllFoods() async {
@@ -153,7 +148,7 @@ class _HomePageState extends State<HomePage> {
         buildSizedBox(mediaQuery),
       ],
       bottom: PreferredSize(
-        preferredSize: Size.fromHeight(mediaQuery.height / 8),//
+        preferredSize: Size.fromHeight(mediaQuery.height / 8), //
         child: Column(
           children: [
             Row(
@@ -173,6 +168,7 @@ class _HomePageState extends State<HomePage> {
                       boxShadow: boxShadowSmall,
                     ),
                     child: TextField(
+                      textAlignVertical: TextAlignVertical.center,
                       cursorColor: fontColor,
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search, color: fontColor),
@@ -182,111 +178,170 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                Container(
-                  height: 50,
-                  width: 120,
-                  //padding: EdgeInsets.only(left: 15),
-                  margin: EdgeInsets.only(right: 15, left: 15),
-                  decoration: BoxDecoration(
-                    color: Color(0xfff5f5f5),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30),
-                    ),
-                    boxShadow: boxShadowSmall,
-                  ),
-                  child: Stack(
-                    alignment: Alignment.topLeft,
-                    overflow: Overflow.visible,
-                    children: [
-                      if (showFilter)
-                        Positioned(
-                          top:10,
-                          child: Container(
-                            padding: EdgeInsets.only(top: 60),
-                            height: 120,
-                            width: 120,
-                            decoration: BoxDecoration(
-                              color: Color(0xfff5f5f5),
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                topRight: Radius.circular(30),
-                                bottomRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                              ),
-                              boxShadow: boxShadowSmall,
-                            ),
-                            child: Column(
-                              children: [
-                                GestureDetector(
-
-                                behavior:HitTestBehavior.translucent,
-                                onTap: () {
-                                    print ("------------------test - veg");
-                                    // foodItems.forEach((item) {
-                                    //   if(item.isVeg ){
-                                    //     setState(() {
-                                    //       foodItems = [];
-                                    //       foodItems.add(item);
-                                    //     });
-                                    //   }
-                                    // });
-                                  },
-                                  child: Container(
-                                    child: Text("Veg"),
-                                  ),
-                                ),
-                                Divider(thickness: 1, indent: 5, endIndent: 5),
-                                GestureDetector(
-                                  behavior:HitTestBehavior.translucent,
-                                  onTap: () {
-                                    print ("------------------test - non veg");
-                                    // foodItems.forEach((item) {
-                                    //   if(!item.isVeg ){
-                                    //     setState(() {
-                                    //       foodItems = [];
-                                    //       foodItems.add(item);
-                                    //     });
-                                    //   }
-                                    // });
-                                  },
-                                  child: Container(
-                                    child: Text("Non Veg"),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            showFilter = !showFilter;
-                          });
-                        },
-                        child: Container(
-                          height: 50,
-                          width: 120,
-                          padding: EdgeInsets.only(left: 15),
-
-                          decoration: BoxDecoration(
-                            color: Color(0xfff5f5f5),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(30),
-                            ),
-                            boxShadow: boxShadowSmall,
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.filter_alt),
-                              SizedBox(width: 5),
-                              Text('Filter'),
-                            ],
-                          ),
-                        ),
+                GestureDetector(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: appColor,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(99),
                       ),
-                    ],
+                      border: Border.all(
+                        color: isVeg ? Color(0xff397c24) : appColor,
+                        width: 3,
+                      ),
+                      boxShadow: boxShadowSmall,
+                    ),
+                    padding: EdgeInsets.all(7),
+                    margin: EdgeInsets.only(left: 15, right: 10),
+                    child: CircleAvatar(
+                      backgroundColor: Color(0xff397c24),
+                      radius: 8,
+                    ),
                   ),
+                  onTap: () {
+                    setState(() {
+                      if (isNonVeg) {
+                        isVeg = !isVeg;
+                        isNonVeg = false;
+                      } else {
+                        isVeg = !isVeg;
+                      }
+                    });
+                  },
                 ),
+                GestureDetector(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: appColor,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(99),
+                      ),
+                      border: Border.all(
+                          color: isNonVeg ? Color(0xff8e4426) : appColor,
+                          width: 3),
+                      boxShadow: boxShadowSmall,
+                    ),
+                    padding: EdgeInsets.all(7),
+                    margin: EdgeInsets.only(right: 10),
+                    child: CircleAvatar(
+                      backgroundColor: Color(0xff8e4426),
+                      radius: 8,
+                    ),
+                  ),
+                  onTap: () {
+                    setState(() {
+                      if (isVeg) {
+                        isNonVeg = !isNonVeg;
+                        isVeg = false;
+                      } else {
+                        isNonVeg = !isNonVeg;
+                      }
+                    });
+                  },
+                )
+                // Container(
+                //   height: 50,
+                //   width: 120,
+                //   //padding: EdgeInsets.only(left: 15),
+                //   margin: EdgeInsets.only(right: 15, left: 15),
+                //   decoration: BoxDecoration(
+                //     color: Color(0xfff5f5f5),
+                //     borderRadius: BorderRadius.all(
+                //       Radius.circular(30),
+                //     ),
+                //     boxShadow: boxShadowSmall,
+                //   ),
+                //   child: Stack(
+                //     alignment: Alignment.topLeft,
+                //     overflow: Overflow.visible,
+                //     children: [
+                //       if (showFilter)
+                //         Positioned(
+                //           top: 1,
+                //           child: Container(
+                //             padding: EdgeInsets.only(top: 60),
+                //             height: 120,
+                //             width: 120,
+                //             decoration: BoxDecoration(
+                //               color: Color(0xfff5f5f5),
+                //               borderRadius: BorderRadius.only(
+                //                 topLeft: Radius.circular(30),
+                //                 topRight: Radius.circular(30),
+                //                 bottomRight: Radius.circular(10),
+                //                 bottomLeft: Radius.circular(10),
+                //               ),
+                //               boxShadow: boxShadowSmall,
+                //             ),
+                //             child: Column(
+                //               children: [
+                //                 GestureDetector(
+                //                   behavior: HitTestBehavior.translucent,
+                //                   onTap: () {
+                //                     print("------------------test - veg");
+                //                     // foodItems.forEach((item) {
+                //                     //   if(item.isVeg ){
+                //                     //     setState(() {
+                //                     //       foodItems = [];
+                //                     //       foodItems.add(item);
+                //                     //     });
+                //                     //   }
+                //                     // });
+                //                   },
+                //                   child: Container(
+                //                     child: Text("Veg"),
+                //                   ),
+                //                 ),
+                //                 Divider(thickness: 1, indent: 5, endIndent: 5),
+                //                 GestureDetector(
+                //                   behavior: HitTestBehavior.translucent,
+                //                   onTap: () {
+                //                     print("------------------test - non veg");
+                //                     // foodItems.forEach((item) {
+                //                     //   if(!item.isVeg ){
+                //                     //     setState(() {
+                //                     //       foodItems = [];
+                //                     //       foodItems.add(item);
+                //                     //     });
+                //                     //   }
+                //                     // });
+                //                   },
+                //                   child: Container(
+                //                     child: Text("Non Veg"),
+                //                   ),
+                //                 ),
+                //               ],
+                //             ),
+                //           ),
+                //         ),
+                //       GestureDetector(
+                //         onTap: () {
+                //           setState(() {
+                //             showFilter = !showFilter;
+                //           });
+                //         },
+                //         child: Container(
+                //           height: 50,
+                //           width: 120,
+                //           padding: EdgeInsets.only(left: 15),
+                //           decoration: BoxDecoration(
+                //             color: Color(0xfff5f5f5),
+                //             borderRadius: BorderRadius.all(
+                //               Radius.circular(30),
+                //             ),
+                //             boxShadow: boxShadowSmall,
+                //           ),
+                //           child: Row(
+                //             children: [
+                //               Icon(Icons.filter_alt),
+                //               SizedBox(width: 5),
+                //               Text('Filter'),
+                //             ],
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
               ],
             ),
             SizedBox(height: 20),
@@ -322,24 +377,12 @@ class _HomePageState extends State<HomePage> {
                               TextStyle(color: Color(0xff1c2843), fontSize: 17),
                         ),
                       ),
-                      Container(
-                          height: 130,
-                          child: ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                            padding: const EdgeInsets.only(top: 5, right: 10),
-                            itemCount: specialFoodItems.length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (ctx, index) => SpecialityItem(
-                                foodItem: specialFoodItems[index]),
-                          )),
+                      SpecialityItem(),
                       Divider(thickness: 1, indent: 20, endIndent: 20),
                     ],
                   ),
                 foodItems != null
-                    ? OtherFoodItems(
-                        foodItems: foodItems,
-                        appBarHeight: appBar.preferredSize.height,
-                      )
+                    ? OtherFoodItems()
                     : Center(
                         child: Text("Menu is Empty"),
                       ),

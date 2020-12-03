@@ -9,7 +9,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:orderingsystem/DatabaseOperation/FoodCollectionDatabase.dart';
 
 import 'constants.dart';
-import 'models/FoodItem.dart';
 
 
 class FormToAddFoodItems extends StatefulWidget {
@@ -105,7 +104,6 @@ class _FormToAddFoodItemsState extends State<FormToAddFoodItems> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     print("\ndata-----------------------------------------");
     var data =  FoodCollectionDatabase().fetchData();
