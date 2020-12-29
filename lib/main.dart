@@ -3,13 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:orderingsystem/models/FoodItem.dart';
-
 import './constants.dart';
 import './widgets/other_food_items.dart';
 import './widgets/speciality_item.dart';
 import 'DatabaseOperation/FoodCollectionDatabase.dart';
 import 'FormToAdd.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

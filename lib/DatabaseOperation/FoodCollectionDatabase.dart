@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,8 +20,8 @@ class FoodCollectionDatabase{
     return await ref.getDownloadURL();
   }
 
-  Future<void> addData({@required File imageFile,@required List<String> categoryListToDisplay,@required final descriptionController,@required final priceController
-    ,@required final foodController,@required bool isSpecial,@required  bool isQuantitative,@required bool isVeg ,@required List<String> timingsListToDisplay}) async {
+  Future<void> addData({@required imageFile,@required List<String> categoryListToDisplay,@required final descriptionController,@required final priceController
+    ,@required final foodController,@required bool isSpecial,@required  bool isQuantitative,@required bool isVeg ,@required List<String> timingsListToDisplay,@required final moreInfoController/*,@required final timingBoolList*/, @required  Map<String, bool> timing}) async {
     print("url-----------------------------------------");
     var documnent = foodCollection.doc();
     String url;
@@ -42,7 +41,10 @@ class FoodCollectionDatabase{
         isVeg: isVeg,
         price: priceController.text,
         isQuantitative: isQuantitative,
-        timing: timingsListToDisplay//finalTimings
+       // timing: timingsListToDisplay,//finalTimings
+         moreInfo: moreInfoController.text,
+//      timingBoolList:timingBoolList,
+        timing:timing,
     );
     documnent.set(item.toJson());
   }
