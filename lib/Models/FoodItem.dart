@@ -1,5 +1,23 @@
-class AddFoodItem {
-  AddFoodItem({
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+
+class FoodItem with ChangeNotifier {
+  static List<FoodItem> _allItems = [];
+  List<FoodItem> get allItems {
+    return [..._allItems];
+  }
+
+  static List<FoodItem> _specialItems = [];
+  List<FoodItem> get specialItems {
+    return [..._specialItems];
+  }
+
+  static List<FoodItem> _otherItems = [];
+  List<FoodItem> get otherItems {
+    return [..._otherItems];
+  }
+
+  FoodItem({
     this.ingredients,
     this.category,
     this.description,
@@ -16,11 +34,11 @@ class AddFoodItem {
   });
 
   Map ingredients;
-  List<String> category;
+  List<dynamic> category;
   String description;
   String foodId;
   String foodName;
-  List<String> imageUrl;
+  List<dynamic> imageUrl;
   bool isAvailable;
   bool isSpecial;
   bool isVeg;
@@ -29,7 +47,7 @@ class AddFoodItem {
   String price;
   Map timing;
 
-  factory AddFoodItem.fromJson(Map<String, dynamic> json) => AddFoodItem(
+  factory FoodItem.fromJson(Map<String, dynamic> json) => FoodItem(
         ingredients: json["Ingredients"] == null ? null : json["Ingredients"],
         category: json["category"] == null ? null : json["category"],
         description: json["description"] == null ? null : json["description"],
@@ -60,4 +78,27 @@ class AddFoodItem {
         "price": price == null ? null : price,
         "timing": timing == null ? null : timing,
       };
+
+  dynamic getFoodItems() async {
+    CollectionReference foodsCollection =
+        FirebaseFirestore.instance.collection('FoodsCollection');
+
+    await foodsCollection
+        .get()
+        .then(
+          (querySnapshot) => querySnapshot.docs.forEach(
+            (element) {
+              FoodItem item = FoodItem.fromJson(element.data());
+              _allItems.add(item);
+            },
+          ),
+        )
+        .then((_) => _allItems.forEach((element) {
+              if (element.isSpecial) {
+                _specialItems.add(element);
+              } else {
+                _otherItems.add(element);
+              }
+            }));
+  }
 }

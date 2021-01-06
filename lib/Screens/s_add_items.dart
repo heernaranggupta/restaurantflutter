@@ -7,9 +7,8 @@ import 'package:orderingsystem/Components/CGridView.dart';
 import 'package:orderingsystem/Components/CIconData.dart';
 import 'package:orderingsystem/Components/CLoadingIndicator.dart';
 import 'package:orderingsystem/Components/CTextField.dart';
-import 'package:orderingsystem/Components/CIcon.dart';
-import 'package:orderingsystem/Models/AddFoodItem.dart';
 import 'package:orderingsystem/Models/Category.dart';
+import 'package:orderingsystem/Models/FoodItem.dart';
 import 'package:orderingsystem/Models/Ingredients.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -273,38 +272,6 @@ class _SAddItemsState extends State<SAddItems> {
     });
   }
 
-  GestureDetector buildBoolBox(
-      {Size mediaQuery, String title, Function onTap, bool value}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: CContainer(
-        height: mediaQuery.height * 0.065,
-        borderRadius: BorderRadius.circular(10),
-        backgroundColor: value ? fontColor : appColor,
-        child: CText(
-          text: title,
-          textColor: value ? Colors.white : fontColor,
-        ),
-      ),
-    );
-  }
-
-  CContainer buildGridContainer(
-      {bool isBoxShadow = true, @required Widget child, double width}) {
-    return CContainer(
-      height: null,
-      width: width ?? MediaQuery.of(context).size.width,
-      isBoxShadow: isBoxShadow,
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(30),
-        topRight: Radius.circular(30),
-        bottomRight: Radius.circular(10),
-        bottomLeft: Radius.circular(10),
-      ),
-      child: child,
-    );
-  }
-
   GestureDetector buildImageBox(
       BuildContext context, Size mediaQuery, int imageCount,
       {double height, double width}) {
@@ -390,7 +357,7 @@ class _SAddItemsState extends State<SAddItems> {
               ),
               borderRadius: BorderRadius.circular(15),
             )
-          : CIcon(),
+          : CIconData(fontFamily: 'addIcon', codePoint: 0xe900),
     );
   }
 
@@ -428,7 +395,7 @@ class _SAddItemsState extends State<SAddItems> {
       _thirdImageURL = await putFile(_choosenFile3);
       _fourthImageURL = await putFile(_choosenFile4);
 
-      AddFoodItem item = AddFoodItem(
+      FoodItem item = FoodItem(
         foodName: _foodNameController.text.trim(),
         price: _foodPriceController.text.trim(),
         description: _shortDescriptionController.text.trim(),
@@ -473,6 +440,38 @@ class _SAddItemsState extends State<SAddItems> {
     });
   }
 
+  GestureDetector buildBoolBox(
+      {Size mediaQuery, String title, Function onTap, bool value}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: CContainer(
+        height: mediaQuery.height * 0.065,
+        borderRadius: BorderRadius.circular(10),
+        backgroundColor: value ? fontColor : appColor,
+        child: CText(
+          text: title,
+          textColor: value ? Colors.white : fontColor,
+        ),
+      ),
+    );
+  }
+
+  CContainer buildGridContainer(
+      {bool isBoxShadow = true, @required Widget child, double width}) {
+    return CContainer(
+      height: null,
+      width: width ?? MediaQuery.of(context).size.width,
+      isBoxShadow: isBoxShadow,
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(30),
+        topRight: Radius.circular(30),
+        bottomRight: Radius.circular(10),
+        bottomLeft: Radius.circular(10),
+      ),
+      child: child,
+    );
+  }
+
   CContainer buildCContainer(
       {Widget child,
       double width,
@@ -492,6 +491,13 @@ class _SAddItemsState extends State<SAddItems> {
 
   SizedBox buildWidthSizedBox(Size mediaQuery) =>
       SizedBox(width: mediaQuery.width * 0.04);
+
+  Icon buildIcon(Size mediaQuery, {@required IconData icon}) {
+    return Icon(
+      icon,
+      size: mediaQuery.width * 0.08,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -789,9 +795,8 @@ class _SAddItemsState extends State<SAddItems> {
                                         isAddCategory = !isAddCategory;
                                       });
                                     },
-                                    child: CIcon(
-                                      iconSize: mediaQuery.width * 0.09,
-                                    ),
+                                    child: buildIcon(mediaQuery,
+                                        icon: CupertinoIcons.plus_circle_fill),
                                   ),
                                 ),
                               ],
@@ -818,11 +823,9 @@ class _SAddItemsState extends State<SAddItems> {
                                 onTap: () {
                                   addCategoryToFirebase();
                                 },
-                                child: Icon(
-                                  Icons.save,
-                                  size: mediaQuery.width * 0.09,
-                                  color: fontColor,
-                                ),
+                                child: buildIcon(mediaQuery,
+                                    icon: CupertinoIcons
+                                        .checkmark_alt_circle_fill),
                               )
                             ],
                           ),
@@ -939,9 +942,8 @@ class _SAddItemsState extends State<SAddItems> {
                                         isAddIngredients = !isAddIngredients;
                                       });
                                     },
-                                    child: CIcon(
-                                      iconSize: mediaQuery.width * 0.09,
-                                    ),
+                                    child: buildIcon(mediaQuery,
+                                        icon: CupertinoIcons.plus_circle_fill),
                                   ),
                                 ),
                               ],
@@ -965,11 +967,9 @@ class _SAddItemsState extends State<SAddItems> {
                                 onTap: () {
                                   addIngredientToFirebase();
                                 },
-                                child: Icon(
-                                  Icons.save,
-                                  size: mediaQuery.width * 0.09,
-                                  color: fontColor,
-                                ),
+                                child: buildIcon(mediaQuery,
+                                    icon: CupertinoIcons
+                                        .checkmark_alt_circle_fill),
                               )
                             ],
                           ),
@@ -1152,9 +1152,8 @@ class _SAddItemsState extends State<SAddItems> {
                                           !isAddExtraIngredient;
                                     });
                                   },
-                                  child: CIcon(
-                                    iconSize: mediaQuery.width * 0.09,
-                                  ),
+                                  child: buildIcon(mediaQuery,
+                                      icon: CupertinoIcons.plus_circle_fill),
                                 )),
                               ],
                             ),
@@ -1185,14 +1184,13 @@ class _SAddItemsState extends State<SAddItems> {
                               ),
                               buildWidthSizedBox(mediaQuery),
                               GestureDetector(
-                                  onTap: () async {
-                                    addExtraIngredientToFirebase();
-                                  },
-                                  child: Icon(
-                                    Icons.save,
-                                    size: mediaQuery.width * 0.09,
-                                    color: fontColor,
-                                  )),
+                                onTap: () async {
+                                  addExtraIngredientToFirebase();
+                                },
+                                child: buildIcon(mediaQuery,
+                                    icon: CupertinoIcons
+                                        .checkmark_alt_circle_fill),
+                              ),
                             ],
                           ),
                         if (_extraIngredientsToDisplay.isNotEmpty)
