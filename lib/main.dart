@@ -1,13 +1,10 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-import './widgets/other_food_items.dart';
-import './widgets/speciality_item.dart';
-import './DatabaseOperation/FoodCollectionDatabase.dart';
-import 'FormToAdd.dart';
 import './constants.dart';
+import 'screens/s_add_items.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,22 +20,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Foodito',
       home: HomePage(),
       theme: ThemeData(
+        primaryColor: fontColor,
         fontFamily: 'Roboto',
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         iconTheme: IconThemeData(
-          color: Color(0xff1c2843),
+          color: fontColor,
         ),
-        scaffoldBackgroundColor: appColor,
         appBarTheme: AppBarTheme(
           color: appColor,
           iconTheme: IconThemeData(
-            color: Color(0xff1c2843),
+            color: fontColor,
           ),
         ),
+        scaffoldBackgroundColor: appColor,
       ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -56,39 +56,34 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    fetchAllFoods();
-
+    // fetchAllFoods();
     super.initState();
   }
 
-  Future<void> fetchAllFoods() async {
-    print("checkkkkkkkkk 111 ------------");
-    var foodItemsTemp = await FoodCollectionDatabase().fetchData();
-    print("checkkkkkkkkk 2222------------${foodItemsTemp.length}");
+  // Future<void> fetchAllFoods() async {
+  //   var foodItemsTemp = await FoodCollectionDatabase().fetchData();
 
-    if (foodItemsTemp == null) {
-      print("------------------------\nNO DATA\n-----------------------------");
-    } else {
-      setState(() {
-        foodItems = foodItemsTemp;
-      });
-    }
-  }
+  //   if (foodItemsTemp == null) {
+  //   } else {
+  //     setState(() {
+  //       foodItems = foodItemsTemp;
+  //     });
+  //   }
+  // }
 
-  bool getSpecialFoodItems() {
-    specialFoodItems = [];
-    bool specialItemsAvailable = false;
-    if (foodItems != null) {
-      foodItems.forEach((item) {
-        if (item.isSpecial) {
-          specialFoodItems.add(item);
-          specialItemsAvailable = true;
-        }
-      });
-    }
-    print("specialFoodItems length - ${specialFoodItems.length}");
-    return specialItemsAvailable;
-  }
+  // bool getSpecialFoodItems() {
+  //   specialFoodItems = [];
+  //   bool specialItemsAvailable = false;
+  //   if (foodItems != null) {
+  //     foodItems.forEach((item) {
+  //       if (item.isSpecial) {
+  //         specialFoodItems.add(item);
+  //         specialItemsAvailable = true;
+  //       }
+  //     });
+  //   }
+  //   return specialItemsAvailable;
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -105,12 +100,6 @@ class _HomePageState extends State<HomePage> {
         GestureDetector(
             child: Icon(Icons.fastfood_sharp),
             onTap: () {
-              // if (isMenuScreen == false) {
-              //   setState(() {
-              //     isMenuScreen = true;
-              //     isEditScreen = false;
-              //   });
-              // }
               setState(() {
                 if (isEditScreen) {
                   isEditScreen = false;
@@ -123,24 +112,13 @@ class _HomePageState extends State<HomePage> {
         GestureDetector(
             child: Icon(Icons.add_circle),
             onTap: () {
-              Navigator.of(context).push(
-                  CupertinoPageRoute(builder: (ctx) => FormToAddFoodItems()));
+              Navigator.of(context)
+                  .push(CupertinoPageRoute(builder: (ctx) => SAddItems()));
             }),
         buildSizedBox(mediaQuery),
         GestureDetector(
             child: Icon(Icons.edit),
             onTap: () {
-              // if (isEditScreen == false) {
-              //   setState(() {
-              //     isMenuScreen = false;
-              //     isEditScreen = true;
-              //   });
-              // } else if (isEditScreen == true) {
-              //   setState(() {
-              //     isMenuScreen = true;
-              //     isEditScreen = false;
-              //   });
-              // }
               setState(() {
                 isEditScreen = !isEditScreen;
               });
@@ -165,7 +143,7 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.all(
                         Radius.circular(30),
                       ),
-                      boxShadow: boxShadowSmall,
+                      boxShadow: boxShadow,
                     ),
                     child: TextField(
                       textAlignVertical: TextAlignVertical.center,
@@ -189,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                         color: isVeg ? Color(0xff397c24) : appColor,
                         width: 3,
                       ),
-                      boxShadow: boxShadowSmall,
+                      boxShadow: boxShadow,
                     ),
                     padding: EdgeInsets.all(7),
                     margin: EdgeInsets.only(left: 15, right: 10),
@@ -219,7 +197,7 @@ class _HomePageState extends State<HomePage> {
                       border: Border.all(
                           color: isNonVeg ? Color(0xff8e4426) : appColor,
                           width: 3),
-                      boxShadow: boxShadowSmall,
+                      boxShadow: boxShadow,
                     ),
                     padding: EdgeInsets.all(7),
                     margin: EdgeInsets.only(right: 10),
@@ -239,109 +217,6 @@ class _HomePageState extends State<HomePage> {
                     });
                   },
                 )
-                // Container(
-                //   height: 50,
-                //   width: 120,
-                //   //padding: EdgeInsets.only(left: 15),
-                //   margin: EdgeInsets.only(right: 15, left: 15),
-                //   decoration: BoxDecoration(
-                //     color: Color(0xfff5f5f5),
-                //     borderRadius: BorderRadius.all(
-                //       Radius.circular(30),
-                //     ),
-                //     boxShadow: boxShadowSmall,
-                //   ),
-                //   child: Stack(
-                //     alignment: Alignment.topLeft,
-                //     overflow: Overflow.visible,
-                //     children: [
-                //       if (showFilter)
-                //         Positioned(
-                //           top: 1,
-                //           child: Container(
-                //             padding: EdgeInsets.only(top: 60),
-                //             height: 120,
-                //             width: 120,
-                //             decoration: BoxDecoration(
-                //               color: Color(0xfff5f5f5),
-                //               borderRadius: BorderRadius.only(
-                //                 topLeft: Radius.circular(30),
-                //                 topRight: Radius.circular(30),
-                //                 bottomRight: Radius.circular(10),
-                //                 bottomLeft: Radius.circular(10),
-                //               ),
-                //               boxShadow: boxShadowSmall,
-                //             ),
-                //             child: Column(
-                //               children: [
-                //                 GestureDetector(
-                //                   behavior: HitTestBehavior.translucent,
-                //                   onTap: () {
-                //                     print("------------------test - veg");
-                //                     // foodItems.forEach((item) {
-                //                     //   if(item.isVeg ){
-                //                     //     setState(() {
-                //                     //       foodItems = [];
-                //                     //       foodItems.add(item);
-                //                     //     });
-                //                     //   }
-                //                     // });
-                //                   },
-                //                   child: Container(
-                //                     child: Text("Veg"),
-                //                   ),
-                //                 ),
-                //                 Divider(thickness: 1, indent: 5, endIndent: 5),
-                //                 GestureDetector(
-                //                   behavior: HitTestBehavior.translucent,
-                //                   onTap: () {
-                //                     print("------------------test - non veg");
-                //                     // foodItems.forEach((item) {
-                //                     //   if(!item.isVeg ){
-                //                     //     setState(() {
-                //                     //       foodItems = [];
-                //                     //       foodItems.add(item);
-                //                     //     });
-                //                     //   }
-                //                     // });
-                //                   },
-                //                   child: Container(
-                //                     child: Text("Non Veg"),
-                //                   ),
-                //                 ),
-                //               ],
-                //             ),
-                //           ),
-                //         ),
-                //       GestureDetector(
-                //         onTap: () {
-                //           setState(() {
-                //             showFilter = !showFilter;
-                //           });
-                //         },
-                //         child: Container(
-                //           height: 50,
-                //           width: 120,
-                //           padding: EdgeInsets.only(left: 15),
-                //           decoration: BoxDecoration(
-                //             color: Color(0xfff5f5f5),
-                //             borderRadius: BorderRadius.all(
-                //               Radius.circular(30),
-                //             ),
-                //             boxShadow: boxShadowSmall,
-                //           ),
-                //           child: Row(
-                //             children: [
-                //               Icon(Icons.filter_alt),
-                //               SizedBox(width: 5),
-                //               Text('Filter'),
-                //             ],
-                //           ),
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
               ],
             ),
             SizedBox(height: 20),
@@ -349,47 +224,49 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-    //print("checkkkkkkkkk 3333333------------${foodItems.length}");
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
         appBar: appBar,
-        body: RefreshIndicator(
-          onRefresh: fetchAllFoods,
-          backgroundColor: Color(0xff1c2843),
-          color: Colors.white,
-          child: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (getSpecialFoodItems())
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0, top: 10),
-                        child: Text(
-                          'Our Speciality',
-                          style:
-                              TextStyle(color: Color(0xff1c2843), fontSize: 17),
-                        ),
-                      ),
-                      SpecialityItem(),
-                      Divider(thickness: 1, indent: 20, endIndent: 20),
-                    ],
-                  ),
-                foodItems != null
-                    ? OtherFoodItems()
-                    : Center(
-                        child: Text("Menu is Empty"),
-                      ),
-              ],
-            ),
-          ),
+        body: Center(
+          child: Text("Menu is Empty"),
         ),
+        // RefreshIndicator(
+        //   onRefresh: fetchAllFoods,
+        //   backgroundColor: Color(0xff1c2843),
+        //   color: Colors.white,
+        //   child: SingleChildScrollView(
+        //     physics: BouncingScrollPhysics(),
+        //     child: Column(
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       children: [
+        //         if (getSpecialFoodItems())
+        //           Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             children: [
+        //               Padding(
+        //                 padding: const EdgeInsets.only(left: 15.0, top: 10),
+        //                 child: Text(
+        //                   'Our Speciality',
+        //                   style:
+        //                       TextStyle(color: Color(0xff1c2843), fontSize: 17),
+        //                 ),
+        //               ),
+        //               SpecialityItem(),
+        //               Divider(thickness: 1, indent: 20, endIndent: 20),
+        //             ],
+        //           ),
+        //         foodItems != null
+        //             ? OtherFoodItems()
+        //             : Center(
+        //                 child: Text("Menu is Empty"),
+        //               ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
       ),
     );
   }

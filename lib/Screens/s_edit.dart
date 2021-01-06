@@ -40,7 +40,7 @@ class _EditItemsState extends State<EditItems> {
       height: 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        boxShadow: boxShadowSmall,
+        boxShadow: boxShadow,
         color: appColor,
       ),
       child: FittedBox(
@@ -138,7 +138,7 @@ class _EditItemsState extends State<EditItems> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(bottom: 20, top: 10),
                   decoration: BoxDecoration(
-                    boxShadow: boxShadowSmall,
+                    boxShadow: boxShadow,
                     borderRadius: BorderRadius.all(Radius.circular(25.0)),
                     color: appColor,
                   ),
@@ -160,7 +160,7 @@ class _EditItemsState extends State<EditItems> {
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
-                    boxShadow: boxShadowSmall,
+                    boxShadow: boxShadow,
                     borderRadius: BorderRadius.all(Radius.circular(25.0)),
                     color: appColor,
                   ),
@@ -226,7 +226,7 @@ class _EditItemsState extends State<EditItems> {
                       height: 55,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        boxShadow: boxShadowSmall,
+                        boxShadow: boxShadow,
                         borderRadius: BorderRadius.all(Radius.circular(25.0)),
                         color: appColor,
                       ),
@@ -311,7 +311,7 @@ class _EditItemsState extends State<EditItems> {
                       height: 55,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        boxShadow: boxShadowSmall,
+                        boxShadow: boxShadow,
                         borderRadius: BorderRadius.all(Radius.circular(25.0)),
                         color: appColor,
                       ),
@@ -352,7 +352,7 @@ class _EditItemsState extends State<EditItems> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     color: appColor,
-                    boxShadow: boxShadowSmall,
+                    boxShadow: boxShadow,
                   ),
                   child: TextField(
                     scrollPhysics: BouncingScrollPhysics(),
