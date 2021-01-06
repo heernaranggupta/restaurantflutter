@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:orderingsystem/Components/CTextField.dart';
 
 import '../constants.dart';
-import 'CContainer.dart';
 import 'CIconData.dart';
 import 'CText.dart';
 

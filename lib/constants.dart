@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 const appColor = Color(0xfff5f5f5);
 const fontColor = Color(0xff1c2843);
 
-bool isEditScreen = false;
-
 bool isVeg = false;
 bool isNonVeg = false;
+
+bool isEditScreen = false;
 
 const List<BoxShadow> boxShadow = const [
   BoxShadow(
