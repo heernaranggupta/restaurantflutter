@@ -3,10 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:orderingsystem/Models/FoodItem.dart';
+import 'package:orderingsystem/Screens/s_home.dart';
 import 'package:provider/provider.dart';
 
 import './constants.dart';
-import 'Screens/s_home.dart';
+import 'Screens/s_new.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

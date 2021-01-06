@@ -17,6 +17,7 @@ class SHome extends StatefulWidget {
 
 class _SHomeState extends State<SHome> {
   bool _isLoading = false;
+
   SizedBox buildSizedBox(Size mediaQuery) =>
       SizedBox(width: mediaQuery.width * 0.04);
 
@@ -30,7 +31,7 @@ class _SHomeState extends State<SHome> {
     setState(() {
       _isLoading = true;
     });
-    await Provider.of<FoodItem>(context, listen: false).getFoodItems();
+    await FoodItem().getFoodItems();
 
     setState(() {
       _isLoading = false;

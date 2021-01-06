@@ -79,7 +79,7 @@ class FoodItem with ChangeNotifier {
         "timing": timing == null ? null : timing,
       };
 
-  dynamic getFoodItems() async {
+  getFoodItems() async {
     CollectionReference foodsCollection =
         FirebaseFirestore.instance.collection('FoodsCollection');
 
