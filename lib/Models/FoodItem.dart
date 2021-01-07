@@ -80,6 +80,10 @@ class  FoodItem with ChangeNotifier {
       };
 
   getFoodItems() async {
+    _allItems.clear();
+    _otherItems.clear();
+    _specialItems.clear();
+    notifyListeners();
     CollectionReference foodsCollection =
         FirebaseFirestore.instance.collection('FoodsCollection');
 
@@ -100,5 +104,7 @@ class  FoodItem with ChangeNotifier {
                 _otherItems.add(element);
               }
             }));
+    notifyListeners();
+    print('notified');
   }
 }

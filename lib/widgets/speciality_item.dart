@@ -26,13 +26,6 @@ class _SpecialityItemState extends State<SpecialityItem> {
   }
 
   @override
-  void initState() {
-    specialFoodItems =
-        Provider.of<FoodItem>(context, listen: false).specialItems;
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     return Consumer<FoodItem>(

@@ -9,12 +9,13 @@ import 'package:orderingsystem/Widgets/speciality_item.dart';
 import '../constants.dart';
 
 class SHome extends StatefulWidget {
+  static const routeName = 'home';
   @override
   _SHomeState createState() => _SHomeState();
 }
 
 class _SHomeState extends State<SHome> {
-  bool _isLoading = false;
+  bool _isLoading = true;
 
   SizedBox buildSizedBox(Size mediaQuery) =>
       SizedBox(width: mediaQuery.width * 0.04);
@@ -25,7 +26,7 @@ class _SHomeState extends State<SHome> {
     super.initState();
   }
 
-  void getData() async {
+  Future<void> getData() async {
     setState(() {
       _isLoading = true;
     });
@@ -191,10 +192,8 @@ class _SHomeState extends State<SHome> {
     );
     return _isLoading
         ? CLoadingIndicator()
-        : GestureDetector(
-            onTap: () {
-              FocusScope.of(context).requestFocus(FocusNode());
-            },
+        : RefreshIndicator(
+            onRefresh: getData,
             child: Scaffold(
               appBar: appBar,
               body: SingleChildScrollView(
@@ -218,7 +217,6 @@ class _SHomeState extends State<SHome> {
                       ],
                     ),
                     OtherFoodItems()
-                  
                   ],
                 ),
               ),
