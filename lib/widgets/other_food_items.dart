@@ -34,8 +34,12 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
     // ignore: missing_required_param
     return Consumer<FoodItem>(
       builder: (context, foodItem, _) {
-        List otherFoodItems = foodItem.otherItems.where((element) =>
+        List otherFoodItems;
+        if(isVeg || isNonVeg)
+          otherFoodItems = foodItem.otherItems.where((element) =>
           (element.isVeg == isVeg)).toList();
+        else
+          otherFoodItems = foodItem.otherItems;
         return Container(
           height: otherFoodItems.length * 125.0,
           child: ListView.builder(

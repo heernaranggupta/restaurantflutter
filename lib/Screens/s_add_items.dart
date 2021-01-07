@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:orderingsystem/Screens/s_home.dart';
 
 import '../constants.dart';
 import '../Components/CText.dart';
@@ -431,7 +432,8 @@ class _SAddItemsState extends State<SAddItems> {
               .doc(value.id)
               .update({'foodId': value.id})
               .then((_) => print('Successss!!!'))
-              .then((_) => Navigator.of(context).pop()));
+              .then((_) async => await FoodItem().getFoodItems())
+              .then((_) => Navigator.of(context).pushReplacementNamed(SHome.routeName)));
     } else {
       print('Please Fill Mandatory Fields');
     }

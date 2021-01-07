@@ -44,6 +44,9 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: appColor,
         ),
         debugShowCheckedModeBanner: false,
+        routes: {
+          SHome.routeName: (context) => SHome()
+        },
       ),
     );
   }
