@@ -191,33 +191,36 @@ class _SHomeState extends State<SHome> {
     );
     return _isLoading
         ? CLoadingIndicator()
-        : Scaffold(
-            appBar: appBar,
-            body: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0, top: 10),
-                        child: Text(
-                          'Our Speciality',
-                          style:
-                              TextStyle(color: Color(0xff1c2843), fontSize: 17),
+        : GestureDetector(
+            onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            child: Scaffold(
+              appBar: appBar,
+              body: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0, top: 10),
+                          child: Text(
+                            'Our Speciality',
+                            style: TextStyle(
+                                color: Color(0xff1c2843), fontSize: 17),
+                          ),
                         ),
-                      ),
-                      SpecialityItem(),
-                      Divider(thickness: 1, indent: 20, endIndent: 20),
-                    ],
-                  ),
-                  OtherFoodItems()
-                  // : Center(
-                  //     child: Text("Menu is Empty"),
-                  //   ),
-                ],
+                        SpecialityItem(),
+                        Divider(thickness: 1, indent: 20, endIndent: 20),
+                      ],
+                    ),
+                    OtherFoodItems()
+                  
+                  ],
+                ),
               ),
             ),
           );

@@ -10,7 +10,6 @@ class OtherFoodItems extends StatefulWidget {
 }
 
 class _OtherFoodItemsState extends State<OtherFoodItems> {
-
   @override
   void initState() {
     super.initState();
@@ -18,7 +17,6 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
 
   @override
   Widget build(BuildContext context) {
-
     Size mediaQuery = MediaQuery.of(context).size;
 
     // print("actual lenth  - ${foodItemsDisplay.length}");
@@ -34,8 +32,13 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
     // ignore: missing_required_param
     return Consumer<FoodItem>(
       builder: (context, foodItem, _) {
-        List otherFoodItems = foodItem.otherItems.where((element) =>
-          (element.isVeg == isVeg)).toList();
+        List otherFoodItems = isVeg
+            ? foodItem.otherItems.where((element) => (element.isVeg)).toList()
+            : isNonVeg
+                ? foodItem.otherItems
+                    .where((element) => (!element.isVeg))
+                    .toList()
+                : foodItem.otherItems;
         return Container(
           height: otherFoodItems.length * 125.0,
           child: ListView.builder(
@@ -57,16 +60,16 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
                   ClipRRect(
                     child: otherFoodItems[index].imageUrl != null
                         ? Image.network(
-                      otherFoodItems[index].imageUrl[0],
-                      fit: BoxFit.cover,
-                      height: mediaQuery.height * 0.3,
-                      width: mediaQuery.width * 0.275,
-                    )
+                            otherFoodItems[index].imageUrl[0],
+                            fit: BoxFit.cover,
+                            height: mediaQuery.height * 0.3,
+                            width: mediaQuery.width * 0.275,
+                          )
                         : Container(
-                      child: Center(child: Text("No Image")),
-                      height: mediaQuery.height * 0.3,
-                      width: mediaQuery.width * 0.275,
-                    ),
+                            child: Center(child: Text("No Image")),
+                            height: mediaQuery.height * 0.3,
+                            width: mediaQuery.width * 0.275,
+                          ),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10.0),
                       bottomLeft: Radius.circular(10.0),
@@ -121,7 +124,9 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
                     alignment: Alignment.center,
                     height: 120,
                     child: Text(
-                      !isEditScreen ? "${otherFoodItems[index].price} ₹" : 'Edit',
+                      !isEditScreen
+                          ? "${otherFoodItems[index].price} ₹"
+                          : 'Edit',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
