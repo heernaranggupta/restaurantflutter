@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
-class  FoodItem with ChangeNotifier {
+class FoodItem with ChangeNotifier {
   static List<FoodItem> _allItems = [];
   List<FoodItem> get allItems {
     return [..._allItems];
@@ -15,6 +15,11 @@ class  FoodItem with ChangeNotifier {
   static List<FoodItem> _otherItems = [];
   List<FoodItem> get otherItems {
     return [..._otherItems];
+  }
+
+  static List<FoodItem> _itemsNotAvailable = [];
+  List<FoodItem> get itemsNotAvailable {
+    return [..._itemsNotAvailable];
   }
 
   FoodItem({
@@ -83,6 +88,7 @@ class  FoodItem with ChangeNotifier {
     _allItems.clear();
     _otherItems.clear();
     _specialItems.clear();
+    _itemsNotAvailable.clear();
     notifyListeners();
     CollectionReference foodsCollection =
         FirebaseFirestore.instance.collection('FoodsCollection');
@@ -98,9 +104,11 @@ class  FoodItem with ChangeNotifier {
           ),
         )
         .then((_) => _allItems.forEach((element) {
-              if (element.isSpecial) {
+              if (!element.isAvailable) {
+                _itemsNotAvailable.add(element);
+              } else if (element.isSpecial && element.isAvailable) {
                 _specialItems.add(element);
-              } else {
+              } else if (!element.isSpecial && element.isAvailable) {
                 _otherItems.add(element);
               }
             }));

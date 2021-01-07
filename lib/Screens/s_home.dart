@@ -2,10 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:orderingsystem/Components/CIconData.dart';
 import 'package:orderingsystem/Components/CLoadingIndicator.dart';
+import 'package:orderingsystem/Components/CText.dart';
 import 'package:orderingsystem/Models/FoodItem.dart';
 import 'package:orderingsystem/Screens/s_add_items.dart';
 import 'package:orderingsystem/Widgets/other_food_items.dart';
 import 'package:orderingsystem/Widgets/speciality_item.dart';
+import 'package:orderingsystem/widgets/items_not_available.dart';
 import '../constants.dart';
 
 class SHome extends StatefulWidget {
@@ -42,6 +44,7 @@ class _SHomeState extends State<SHome> {
     final mediaQuery = MediaQuery.of(context).size;
 
     AppBar appBar = AppBar(
+      automaticallyImplyLeading: false,
       elevation: 0,
       centerTitle: false,
       title: Text(
@@ -192,31 +195,34 @@ class _SHomeState extends State<SHome> {
     );
     return _isLoading
         ? CLoadingIndicator()
-        : RefreshIndicator(
-            onRefresh: getData,
-            child: Scaffold(
-              appBar: appBar,
-              body: SingleChildScrollView(
+        : Scaffold(
+            appBar: appBar,
+            body: RefreshIndicator(
+              onRefresh: getData,
+              child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 15.0, top: 10),
-                          child: Text(
-                            'Our Speciality',
-                            style: TextStyle(
-                                color: Color(0xff1c2843), fontSize: 17),
-                          ),
-                        ),
-                        SpecialityItem(),
-                        Divider(thickness: 1, indent: 20, endIndent: 20),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, top: 10),
+                      child: CText(
+                        text: 'Our Speciality',
+                        fontSize: 17,
+                      ),
                     ),
-                    OtherFoodItems()
+                    SpecialityItem(),
+                    Divider(thickness: 1, indent: 20, endIndent: 20),
+                    OtherFoodItems(),
+                    Divider(thickness: 1, indent: 20, endIndent: 20),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, top: 10),
+                      child: CText(
+                        text: 'Not Available',
+                        fontSize: 17,
+                      ),
+                    ),
+                    ItemsNotAvailable()
                   ],
                 ),
               ),
