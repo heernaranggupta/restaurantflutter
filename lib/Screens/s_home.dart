@@ -6,8 +6,6 @@ import 'package:orderingsystem/Models/FoodItem.dart';
 import 'package:orderingsystem/Screens/s_add_items.dart';
 import 'package:orderingsystem/Widgets/other_food_items.dart';
 import 'package:orderingsystem/Widgets/speciality_item.dart';
-import 'package:provider/provider.dart';
-
 import '../constants.dart';
 
 class SHome extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
-class FoodItem with ChangeNotifier {
+class  FoodItem with ChangeNotifier {
   static List<FoodItem> _allItems = [];
   List<FoodItem> get allItems {
     return [..._allItems];
