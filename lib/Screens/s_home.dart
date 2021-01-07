@@ -6,17 +6,16 @@ import 'package:orderingsystem/Models/FoodItem.dart';
 import 'package:orderingsystem/Screens/s_add_items.dart';
 import 'package:orderingsystem/Widgets/other_food_items.dart';
 import 'package:orderingsystem/Widgets/speciality_item.dart';
-import 'package:provider/provider.dart';
-
 import '../constants.dart';
 
 class SHome extends StatefulWidget {
+  static const routeName = 'home';
   @override
   _SHomeState createState() => _SHomeState();
 }
 
 class _SHomeState extends State<SHome> {
-  bool _isLoading = false;
+  bool _isLoading = true;
 
   SizedBox buildSizedBox(Size mediaQuery) =>
       SizedBox(width: mediaQuery.width * 0.04);
@@ -27,7 +26,7 @@ class _SHomeState extends State<SHome> {
     super.initState();
   }
 
-  void getData() async {
+  Future<void> getData() async {
     setState(() {
       _isLoading = true;
     });
@@ -40,7 +39,9 @@ class _SHomeState extends State<SHome> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context).size;
+    final mediaQuery = MediaQuery
+        .of(context)
+        .size;
 
     AppBar appBar = AppBar(
       elevation: 0,
@@ -193,35 +194,38 @@ class _SHomeState extends State<SHome> {
     );
     return _isLoading
         ? CLoadingIndicator()
-        : Scaffold(
-            appBar: appBar,
-            body: SingleChildScrollView(
-              physics: BouncingScrollPhysics(),
-              child: Column(
+        : RefreshIndicator(
+      onRefresh: getData,
+      child: Scaffold(
+        appBar: appBar,
+        body: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0, top: 10),
-                        child: Text(
-                          'Our Speciality',
-                          style:
-                              TextStyle(color: Color(0xff1c2843), fontSize: 17),
-                        ),
-                      ),
-                      SpecialityItem(),
-                      Divider(thickness: 1, indent: 20, endIndent: 20),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15.0, top: 10),
+                    child: Text(
+                      'Our Speciality',
+                      style: TextStyle(
+                          color: Color(0xff1c2843), fontSize: 17),
+                    ),
                   ),
-                  OtherFoodItems()
-                  // : Center(
-                  //     child: Text("Menu is Empty"),
-                  //   ),
+                  SpecialityItem(),
+                  Divider(thickness: 1, indent: 20, endIndent: 20),
                 ],
               ),
-            ),
-          );
+              OtherFoodItems()
+              // : Center(
+              //     child: Text("Menu is Empty"),
+              //   ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

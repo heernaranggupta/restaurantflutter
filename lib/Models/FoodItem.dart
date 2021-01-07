@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
-class FoodItem with ChangeNotifier {
+class  FoodItem with ChangeNotifier {
   static List<FoodItem> _allItems = [];
   List<FoodItem> get allItems {
     return [..._allItems];
@@ -80,6 +80,10 @@ class FoodItem with ChangeNotifier {
       };
 
   getFoodItems() async {
+    _allItems.clear();
+    _otherItems.clear();
+    _specialItems.clear();
+    notifyListeners();
     CollectionReference foodsCollection =
         FirebaseFirestore.instance.collection('FoodsCollection');
 
@@ -100,5 +104,7 @@ class FoodItem with ChangeNotifier {
                 _otherItems.add(element);
               }
             }));
+    notifyListeners();
+    print('notified');
   }
 }

@@ -34,12 +34,18 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
     // ignore: missing_required_param
     return Consumer<FoodItem>(
       builder: (context, foodItem, _) {
+        List otherFoodItems;
+        if(isVeg || isNonVeg)
+          otherFoodItems = foodItem.otherItems.where((element) =>
+          (element.isVeg == isVeg)).toList();
+        else
+          otherFoodItems = foodItem.otherItems;
         return Container(
-          height: foodItem.otherItems.length * 125.0,
+          height: otherFoodItems.length * 125.0,
           child: ListView.builder(
             physics: NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.only(right: 20),
-            itemCount: foodItem.otherItems.length,
+            itemCount: otherFoodItems.length,
             itemBuilder: (ctx, index) => Container(
               margin: EdgeInsets.only(top: 10, bottom: 10, left: 15),
               decoration: BoxDecoration(
@@ -53,9 +59,9 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ClipRRect(
-                    child: foodItem.otherItems[index].imageUrl != null
+                    child: otherFoodItems[index].imageUrl != null
                         ? Image.network(
-                      foodItem.otherItems[index].imageUrl[0],
+                      otherFoodItems[index].imageUrl[0],
                       fit: BoxFit.cover,
                       height: mediaQuery.height * 0.3,
                       width: mediaQuery.width * 0.275,
@@ -91,14 +97,14 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  foodItem.otherItems[index].foodName,
+                                  otherFoodItems[index].foodName,
                                   style: TextStyle(fontSize: 20),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 SizedBox(height: 5),
                                 Text(
-                                  foodItem.otherItems[index].description,
+                                  otherFoodItems[index].description,
                                   style: TextStyle(
                                     fontSize: 13,
                                     color: Colors.grey[600],
@@ -119,7 +125,7 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
                     alignment: Alignment.center,
                     height: 120,
                     child: Text(
-                      !isEditScreen ? "${foodItem.otherItems[index].price} ₹" : 'Edit',
+                      !isEditScreen ? "${otherFoodItems[index].price} ₹" : 'Edit',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,

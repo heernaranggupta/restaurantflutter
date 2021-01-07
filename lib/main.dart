@@ -7,7 +7,6 @@ import 'package:orderingsystem/Screens/s_home.dart';
 import 'package:provider/provider.dart';
 
 import './constants.dart';
-import 'Screens/s_new.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +43,9 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: appColor,
         ),
         debugShowCheckedModeBanner: false,
+        routes: {
+          SHome.routeName: (context) => SHome()
+        },
       ),
     );
   }
