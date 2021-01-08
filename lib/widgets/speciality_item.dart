@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:orderingsystem/Components/CContainer.dart';
+import 'package:orderingsystem/Components/CText.dart';
 import 'package:orderingsystem/Models/FoodItem.dart';
 import 'package:provider/provider.dart';
 
@@ -23,60 +25,121 @@ class _SpecialityItemState extends State<SpecialityItem> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
     return Consumer<FoodItem>(
-      builder: (context, foodItem, child) {
-        if(isVeg || isNonVeg)
-          specialFoodItems = foodItem.specialItems.where((element) =>
-          (element.isVeg == isVeg)).toList();
-        else
-          specialFoodItems = foodItem.specialItems;
-        return Container(
-          height: 135,
-          child: ListView.builder(
-            physics: BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.only(top: 5, right: 10),
-            itemCount: specialFoodItems.length,
-            itemBuilder: (ctx, index) =>
-                GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    margin: EdgeInsets.only(top: 10, bottom: 10, left: 15),
-                    decoration: BoxDecoration(
-                      color: Color(0xfff5f5f5),
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      boxShadow: boxShadow,
-                    ),
-                    width: mediaQuery.width * 0.9,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ClipRRect(
-                          child: specialFoodItems[index].imageUrl != null
-                              ? Image.network(
-                            specialFoodItems[index].imageUrl[0],
-                            fit: BoxFit.cover,
-                            height: mediaQuery.height * 0.3,
-                            width: mediaQuery.width * 0.275,
-                          )
-                              : Container(
-                            child: Center(child: Text("No Image")),
-                            height: mediaQuery.height * 0.3,
-                            width: mediaQuery.width * 0.275,
+      builder: (context, foodItem, _) {
+        List specialFoodItems = isVeg
+            ? foodItem.specialItems.where((element) => (element.isVeg)).toList()
+            : isNonVeg
+                ? foodItem.specialItems
+                    .where((element) => (!element.isVeg))
+                    .toList()
+                : foodItem.specialItems;
+        return specialFoodItems.length != 0
+            ? Container(
+                height: 135,
+                child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.only(top: 5, right: 10),
+                  itemCount: specialFoodItems.length,
+                  itemBuilder: (ctx, index) => GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      margin: EdgeInsets.only(top: 10, bottom: 10, left: 15),
+                      decoration: BoxDecoration(
+                        color: Color(0xfff5f5f5),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        boxShadow: boxShadow,
+                      ),
+                      width: mediaQuery.width * 0.9,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ClipRRect(
+                            child: specialFoodItems[index].imageUrl != null
+                                ? Image.network(
+                                    specialFoodItems[index].imageUrl[0],
+                                    fit: BoxFit.cover,
+                                    height: mediaQuery.height * 0.3,
+                                    width: mediaQuery.width * 0.275,
+                                  )
+                                : Container(
+                                    child: Center(child: Text("No Image")),
+                                    height: mediaQuery.height * 0.3,
+                                    width: mediaQuery.width * 0.275,
+                                  ),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.0),
+                              bottomLeft: Radius.circular(10.0),
+                            ),
                           ),
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.0),
-                            bottomLeft: Radius.circular(10.0),
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Color(0xfff5f5f5),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.white,
+                                    offset: Offset(-3, -3),
+                                    blurRadius: 4,
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          specialFoodItems[index].foodName,
+                                          style: TextStyle(fontSize: 20),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        SizedBox(height: 5),
+                                        Text(
+                                          specialFoodItems[index].description,
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: Colors.grey[600],
+                                          ),
+                                          maxLines: 3,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          child: Container(
+                          SizedBox(width: 10),
+                          Container(
+                            width: 90,
+                            alignment: Alignment.center,
+                            height: 120,
+                            child: !isEditScreen
+                                ? buildText(
+                                    "${specialFoodItems[index].price} ₹")
+                                : GestureDetector(
+                                    child: buildText('Edit'),
+                                    onTap: () {
+                                      Navigator.of(context).push(
+                                        CupertinoPageRoute(
+                                          builder: (ctx) => EditItems(),
+                                        ),
+                                      );
+                                    },
+                                  ),
                             decoration: BoxDecoration(
-                              color: Color(0xfff5f5f5),
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.white,
@@ -84,83 +147,34 @@ class _SpecialityItemState extends State<SpecialityItem> {
                                   blurRadius: 4,
                                 ),
                               ],
-                            ),
-                            child: Row(
-                              children: [
-                                SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        specialFoodItems[index].foodName,
-                                        style: TextStyle(fontSize: 20),
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      SizedBox(height: 5),
-                                      Text(
-                                        specialFoodItems[index].description,
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: Colors.grey[600],
-                                        ),
-                                        maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 10),
-                        Container(
-                          width: 90,
-                          alignment: Alignment.center,
-                          height: 120,
-                          child: !isEditScreen
-                              ? buildText("${specialFoodItems[index].price} ₹")
-                              : GestureDetector(
-                            child: buildText('Edit'),
-                            onTap: () {
-                              Navigator.of(context).push(
-                                CupertinoPageRoute(
-                                  builder: (ctx) => EditItems(),
-                                ),
-                              );
-                            },
-                          ),
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.white,
-                                offset: Offset(-3, -3),
-                                blurRadius: 4,
+                              gradient: LinearGradient(
+                                begin: Alignment.bottomLeft,
+                                end: Alignment.topRight,
+                                colors: <Color>[
+                                  Color(0xFFFF7D55),
+                                  Color(0xFFF4197E),
+                                ],
                               ),
-                            ],
-                            gradient: LinearGradient(
-                              begin: Alignment.bottomLeft,
-                              end: Alignment.topRight,
-                              colors: <Color>[
-                                Color(0xFFFF7D55),
-                                Color(0xFFF4197E),
-                              ],
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
                             ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
-          ),
-        );
+              )
+            : Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                child: CContainer(
+                  borderRadius: BorderRadius.circular(15),
+                  child:
+                      Center(child: CText(text: 'Nothing Special For Today.')),
+                ),
+              );
       },
     );
   }

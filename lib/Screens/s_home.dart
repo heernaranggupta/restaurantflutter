@@ -39,9 +39,7 @@ class _SHomeState extends State<SHome> {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery
-        .of(context)
-        .size;
+    final mediaQuery = MediaQuery.of(context).size;
 
     AppBar appBar = AppBar(
       elevation: 0,
@@ -195,37 +193,34 @@ class _SHomeState extends State<SHome> {
     return _isLoading
         ? CLoadingIndicator()
         : RefreshIndicator(
-      onRefresh: getData,
-      child: Scaffold(
-        appBar: appBar,
-        body: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15.0, top: 10),
-                    child: Text(
-                      'Our Speciality',
-                      style: TextStyle(
-                          color: Color(0xff1c2843), fontSize: 17),
+            onRefresh: getData,
+            child: Scaffold(
+              appBar: appBar,
+              body: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0, top: 10),
+                          child: Text(
+                            'Our Speciality',
+                            style: TextStyle(
+                                color: Color(0xff1c2843), fontSize: 17),
+                          ),
+                        ),
+                        SpecialityItem(),
+                        Divider(thickness: 1, indent: 20, endIndent: 20),
+                      ],
                     ),
-                  ),
-                  SpecialityItem(),
-                  Divider(thickness: 1, indent: 20, endIndent: 20),
-                ],
+                    OtherFoodItems()
+                  ],
+                ),
               ),
-              OtherFoodItems()
-              // : Center(
-              //     child: Text("Menu is Empty"),
-              //   ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 }
