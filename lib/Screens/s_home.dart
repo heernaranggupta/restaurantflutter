@@ -17,7 +17,7 @@ class SHome extends StatefulWidget {
 }
 
 class _SHomeState extends State<SHome> {
-  bool _isLoading = true;
+  bool _isLoading = false;
 
   SizedBox buildSizedBox(Size mediaQuery) =>
       SizedBox(width: mediaQuery.width * 0.04);
@@ -32,7 +32,9 @@ class _SHomeState extends State<SHome> {
     setState(() {
       _isLoading = true;
     });
-    await FoodItem().getFoodItems();
+    await FoodItem().getAllFoodItems().catchError((error) {
+      print(error);
+    });
 
     setState(() {
       _isLoading = false;
@@ -78,8 +80,7 @@ class _SHomeState extends State<SHome> {
               fontFamily: 'addIcon',
             ),
             onTap: () {
-              Navigator.of(context)
-                  .push(CupertinoPageRoute(builder: (ctx) => SAddItems()));
+              Navigator.of(context).pushNamed(SAddItems.routeName);
             }),
         buildSizedBox(mediaQuery),
         GestureDetector(
@@ -198,6 +199,8 @@ class _SHomeState extends State<SHome> {
         : Scaffold(
             appBar: appBar,
             body: RefreshIndicator(
+              color: fontColor,
+              displacement: 60,
               onRefresh: getData,
               child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),

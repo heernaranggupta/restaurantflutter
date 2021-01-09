@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:orderingsystem/Components/CContainer.dart';
 import 'package:orderingsystem/Components/CText.dart';
+import 'package:orderingsystem/Screens/s_edit.dart';
 import 'package:provider/provider.dart';
 import '../Models/FoodItem.dart';
 
@@ -12,9 +14,14 @@ class OtherFoodItems extends StatefulWidget {
 }
 
 class _OtherFoodItemsState extends State<OtherFoodItems> {
-  @override
-  void initState() {
-    super.initState();
+  List<FoodItem> otherFoodItems;
+
+  Widget buildText(String title) {
+    return CText(
+      text: title,
+      textColor: Colors.white,
+      fontSize: 18,
+    );
   }
 
   @override
@@ -23,7 +30,7 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
 
     return Consumer<FoodItem>(
       builder: (context, foodItem, _) {
-        List otherFoodItems = isVeg
+        otherFoodItems = isVeg
             ? foodItem.otherItems.where((element) => (element.isVeg)).toList()
             : isNonVeg
                 ? foodItem.otherItems
@@ -51,11 +58,13 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
                       children: [
                         ClipRRect(
                           child: otherFoodItems[index].imageUrl != null
-                              ? Image.network(
-                                  otherFoodItems[index].imageUrl[0],
-                                  fit: BoxFit.cover,
+                              ? Image(
+                                  image: CachedNetworkImageProvider(
+                                    otherFoodItems[index].imageUrl[0],
+                                  ),
                                   height: mediaQuery.height * 0.3,
                                   width: mediaQuery.width * 0.275,
+                                  fit: BoxFit.cover,
                                 )
                               : Container(
                                   child: Center(child: Text("No Image")),
@@ -116,15 +125,17 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
                           width: 90,
                           alignment: Alignment.center,
                           height: 120,
-                          child: Text(
-                            !isEditScreen
-                                ? "${otherFoodItems[index].price} ₹"
-                                : 'Edit',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                            ),
-                          ),
+                          child: !isEditScreen
+                              ? buildText("${otherFoodItems[index].price} ₹")
+                              : GestureDetector(
+                                  child: buildText('Edit'),
+                                  onTap: () {
+                                    Navigator.of(context).pushNamed(
+                                        SEditItems.routeName,
+                                        arguments:
+                                            otherFoodItems[index].foodId);
+                                  },
+                                ),
                           decoration: BoxDecoration(
                             boxShadow: [
                               BoxShadow(
