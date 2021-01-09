@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -84,7 +85,7 @@ class FoodItem with ChangeNotifier {
         "timing": timing == null ? null : timing,
       };
 
-  getFoodItems() async {
+  Future<dynamic> getAllFoodItems() async {
     _allItems.clear();
     _otherItems.clear();
     _specialItems.clear();
@@ -114,5 +115,34 @@ class FoodItem with ChangeNotifier {
             }));
     notifyListeners();
     print('notified');
+  }
+
+  Future<dynamic> getFoodItemById(String foodId) async {
+    FoodItem item;
+    CollectionReference foodsCollection =
+        FirebaseFirestore.instance.collection('FoodsCollection');
+
+    await foodsCollection.doc(foodId).get().then((querySnapshot) {
+      item = FoodItem.fromJson(querySnapshot.data());
+    });
+    return item ?? null;
+  }
+
+  Future<dynamic> addFoodItem(FoodItem foodItem) async {
+    CollectionReference foodsCollection =
+        FirebaseFirestore.instance.collection('FoodsCollection');
+    await foodsCollection.add(foodItem.toJson()).then((value) async =>
+        await foodsCollection
+            .doc(value.id)
+            .update({'foodId': value.id}).then((_) => print('Successss!!!')));
+  }
+
+  Future<dynamic> updateFoodItem(FoodItem foodItem) async {
+    CollectionReference foodsCollection =
+        FirebaseFirestore.instance.collection('FoodsCollection');
+    await foodsCollection
+        .doc(foodItem.foodId)
+        .update(foodItem.toJson())
+        .then((value) => print('Successss!!!'));
   }
 }

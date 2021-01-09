@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:orderingsystem/Screens/s_home.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
 import '../Components/CText.dart';
@@ -23,6 +24,7 @@ import '../Components/CBottomBarButton.dart';
 import '../Components/CUploadBottomSheet.dart';
 
 class SAddItems extends StatefulWidget {
+  static const routeName = 'add-items';
   @override
   _SAddItemsState createState() => _SAddItemsState();
 }
@@ -103,14 +105,20 @@ class _SAddItemsState extends State<SAddItems> {
         .then((querySnapshot) => querySnapshot.docs.forEach((result) {
               _ingredientsList.add(Ingredients.fromJson(result.data()));
               _extraIngredientsList.add(Ingredients.fromJson(result.data()));
-            }));
+            }))
+        .catchError((error) {
+      print(error);
+    });
 
     await firestoreInstance
         .collection('Categories')
         .get()
         .then((querySnapshot) => querySnapshot.docs.forEach((result) {
               _categoriesList.add(Categories.fromJson(result.data()));
-            }));
+            }))
+        .catchError((error) {
+      print(error);
+    });
 
     setState(() {
       _isLoading = false;
@@ -164,7 +172,10 @@ class _SAddItemsState extends State<SAddItems> {
                       .then((querySnapshot) => querySnapshot.data())
                       .then((value) {
                     _categoriesList.add(Categories.fromJson(value));
-                  }));
+                  }))
+              .catchError((error) {
+                print(error);
+              });
         });
         _categoryFile = null;
         _categoryImageURL = null;
@@ -210,7 +221,10 @@ class _SAddItemsState extends State<SAddItems> {
                     .then((value) {
                   _ingredientsList.add(Ingredients.fromJson(value));
                   _extraIngredientsList.add(Ingredients.fromJson(value));
-                }));
+                }))
+            .catchError((error) {
+              print(error);
+            });
         _addIngredientNameController.clear();
       });
     }
@@ -243,6 +257,8 @@ class _SAddItemsState extends State<SAddItems> {
           });
           _addExtraIngredientNameController.clear();
           _addExtraIngredientPriceController.clear();
+        }).catchError((error) {
+          print(error);
         });
       } else {
         var id;
@@ -260,7 +276,10 @@ class _SAddItemsState extends State<SAddItems> {
                   .get()
                   .then((querySnapshot) => querySnapshot.data())
                   .then((value) =>
-                      _extraIngredientsList.add(Ingredients.fromJson(value))));
+                      _extraIngredientsList.add(Ingredients.fromJson(value))))
+              .catchError((error) {
+                print(error);
+              });
           _addExtraIngredientNameController.clear();
           _addExtraIngredientPriceController.clear();
         });
@@ -368,21 +387,20 @@ class _SAddItemsState extends State<SAddItems> {
     Reference ref =
         storageInstance.ref().child('foods_images_uploaded/${DateTime.now()}');
     print(ref);
-    TaskSnapshot data = await ref.putFile(file);
+    TaskSnapshot data = await ref.putFile(file).catchError((error) {
+      print(error);
+    });
+    print('--------------');
     print(data.state);
     if (data.state == TaskState.success) {
       String imageURL = await data.ref.getDownloadURL();
       return imageURL;
     }
+
     return null;
   }
 
   void _addItem() async {
-    setState(() {
-      _isLoading = true;
-    });
-    CollectionReference foodsCollection =
-        FirebaseFirestore.instance.collection('FoodsCollection');
     if (_choosenFile1 != null &&
         _choosenFile2 != null &&
         _choosenFile3 != null &&
@@ -391,12 +409,15 @@ class _SAddItemsState extends State<SAddItems> {
         _foodPriceController.text.isNotEmpty &&
         _shortDescriptionController.text.isNotEmpty &&
         _moreInfoController.text.isNotEmpty) {
+      setState(() {
+        _isLoading = true;
+      });
       _firstImageURL = await putFile(_choosenFile1);
       _secondImageURL = await putFile(_choosenFile2);
       _thirdImageURL = await putFile(_choosenFile3);
       _fourthImageURL = await putFile(_choosenFile4);
 
-      FoodItem item = FoodItem(
+      FoodItem foodItem = FoodItem(
         foodName: _foodNameController.text.trim(),
         price: _foodPriceController.text.trim(),
         description: _shortDescriptionController.text.trim(),
@@ -415,31 +436,33 @@ class _SAddItemsState extends State<SAddItems> {
         optional: _choosenExtraIngredients,
         timing: _choosentiming,
       );
-      print(item.foodName);
-      print(item.price);
-      print(item.description);
-      print(item.moreInfo);
-      print(item.isSpecial);
-      print(item.isVeg);
-      print(item.isAvailable);
-      print(item.imageUrl);
-      print(item.timing);
-      print(item.category);
-      print(item.ingredients);
-      print(item.optional);
-      await foodsCollection.add(item.toJson()).then((value) async =>
-          await foodsCollection
-              .doc(value.id)
-              .update({'foodId': value.id})
-              .then((_) => print('Successss!!!'))
-              .then((_) async => await FoodItem().getFoodItems())
-              .then((_) => Navigator.of(context).pushReplacementNamed(SHome.routeName)));
+      print(foodItem.foodName);
+      print(foodItem.price);
+      print(foodItem.description);
+      print(foodItem.moreInfo);
+      print(foodItem.isSpecial);
+      print(foodItem.isVeg);
+      print(foodItem.isAvailable);
+      print(foodItem.imageUrl);
+      print(foodItem.timing);
+      print(foodItem.category);
+      print(foodItem.ingredients);
+      print(foodItem.optional);
+
+      Provider.of<FoodItem>(context, listen: false)
+          .addFoodItem(foodItem)
+          .then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            SHome.routeName, ModalRoute.withName(SHome.routeName));
+      }).catchError((error) {
+        print(error);
+      });
     } else {
       print('Please Fill Mandatory Fields');
     }
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   GestureDetector buildBoolBox(
@@ -1040,7 +1063,6 @@ class _SAddItemsState extends State<SAddItems> {
                                                     .putIfAbsent(element.id,
                                                         () => element.value);
                                               });
-                                              print(_choosenExtraIngredients);
                                             });
                                           },
                                           child: Stack(

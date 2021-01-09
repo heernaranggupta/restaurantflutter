@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:orderingsystem/Components/CContainer.dart';
 import 'package:orderingsystem/Components/CText.dart';
+import 'package:orderingsystem/Screens/s_edit.dart';
 import 'package:provider/provider.dart';
 import '../Models/FoodItem.dart';
 
@@ -12,9 +14,14 @@ class ItemsNotAvailable extends StatefulWidget {
 }
 
 class _ItemsNotAvailableState extends State<ItemsNotAvailable> {
-  @override
-  void initState() {
-    super.initState();
+  List<FoodItem> itemsNotAvailable;
+
+  Widget buildText(String title) {
+    return CText(
+      text: title,
+      textColor: Colors.white,
+      fontSize: 18,
+    );
   }
 
   @override
@@ -23,7 +30,7 @@ class _ItemsNotAvailableState extends State<ItemsNotAvailable> {
 
     return Consumer<FoodItem>(
       builder: (context, foodItem, _) {
-        List itemsNotAvailable = isVeg
+        itemsNotAvailable = isVeg
             ? foodItem.itemsNotAvailable
                 .where((element) => (element.isVeg))
                 .toList()
@@ -56,11 +63,13 @@ class _ItemsNotAvailableState extends State<ItemsNotAvailable> {
                         children: [
                           ClipRRect(
                             child: itemsNotAvailable[index].imageUrl != null
-                                ? Image.network(
-                                    itemsNotAvailable[index].imageUrl[0],
-                                    fit: BoxFit.cover,
+                                ? Image(
+                                    image: CachedNetworkImageProvider(
+                                      itemsNotAvailable[index].imageUrl[0],
+                                    ),
                                     height: mediaQuery.height * 0.3,
                                     width: mediaQuery.width * 0.275,
+                                    fit: BoxFit.cover,
                                   )
                                 : Container(
                                     child: Center(child: Text("No Image")),
@@ -122,15 +131,18 @@ class _ItemsNotAvailableState extends State<ItemsNotAvailable> {
                             width: 90,
                             alignment: Alignment.center,
                             height: 120,
-                            child: Text(
-                              !isEditScreen
-                                  ? "${itemsNotAvailable[index].price} ₹"
-                                  : 'Edit',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ),
-                            ),
+                            child: !isEditScreen
+                                ? buildText(
+                                    "${itemsNotAvailable[index].price} ₹")
+                                : GestureDetector(
+                                    child: buildText('Edit'),
+                                    onTap: () {
+                                      Navigator.of(context).pushNamed(
+                                          SEditItems.routeName,
+                                          arguments:
+                                              itemsNotAvailable[index].foodId);
+                                    },
+                                  ),
                             decoration: BoxDecoration(
                               boxShadow: [
                                 BoxShadow(

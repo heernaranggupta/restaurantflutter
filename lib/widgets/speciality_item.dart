@@ -1,11 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:orderingsystem/Components/CContainer.dart';
 import 'package:orderingsystem/Components/CText.dart';
 import 'package:orderingsystem/Models/FoodItem.dart';
+import 'package:orderingsystem/Screens/s_edit.dart';
 import 'package:provider/provider.dart';
 
-import '../screens/s_edit.dart';
 import '../constants.dart';
 
 class SpecialityItem extends StatefulWidget {
@@ -15,13 +16,12 @@ class SpecialityItem extends StatefulWidget {
 
 class _SpecialityItemState extends State<SpecialityItem> {
   List<FoodItem> specialFoodItems = [];
-  Text buildText(String title) {
-    return Text(
-      title,
-      style: TextStyle(
-        color: Colors.white,
-        fontSize: 18,
-      ),
+
+  Widget buildText(String title) {
+    return CText(
+      text: title,
+      textColor: Colors.white,
+      fontSize: 18,
     );
   }
 
@@ -30,7 +30,7 @@ class _SpecialityItemState extends State<SpecialityItem> {
     final mediaQuery = MediaQuery.of(context).size;
     return Consumer<FoodItem>(
       builder: (context, foodItem, _) {
-        List specialFoodItems = isVeg
+        specialFoodItems = isVeg
             ? foodItem.specialItems.where((element) => (element.isVeg)).toList()
             : isNonVeg
                 ? foodItem.specialItems
@@ -60,11 +60,13 @@ class _SpecialityItemState extends State<SpecialityItem> {
                         children: [
                           ClipRRect(
                             child: specialFoodItems[index].imageUrl != null
-                                ? Image.network(
-                                    specialFoodItems[index].imageUrl[0],
-                                    fit: BoxFit.cover,
+                                ? Image(
+                                    image: CachedNetworkImageProvider(
+                                      specialFoodItems[index].imageUrl[0],
+                                    ),
                                     height: mediaQuery.height * 0.3,
                                     width: mediaQuery.width * 0.275,
+                                    fit: BoxFit.cover,
                                   )
                                 : Container(
                                     child: Center(child: Text("No Image")),
@@ -132,11 +134,10 @@ class _SpecialityItemState extends State<SpecialityItem> {
                                 : GestureDetector(
                                     child: buildText('Edit'),
                                     onTap: () {
-                                      Navigator.of(context).push(
-                                        CupertinoPageRoute(
-                                          builder: (ctx) => EditItems(),
-                                        ),
-                                      );
+                                      Navigator.of(context).pushNamed(
+                                          SEditItems.routeName,
+                                          arguments:
+                                              specialFoodItems[index].foodId);
                                     },
                                   ),
                             decoration: BoxDecoration(
@@ -171,8 +172,7 @@ class _SpecialityItemState extends State<SpecialityItem> {
                     const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
                 child: CContainer(
                   borderRadius: BorderRadius.circular(15),
-                  child:
-                      Center(child: CText(text: 'Nothing Special For Today.')),
+                  child: Center(child: CText(text: 'Nothing Special.')),
                 ),
               );
       },
