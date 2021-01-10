@@ -17,11 +17,11 @@ class SpecialityItem extends StatefulWidget {
 class _SpecialityItemState extends State<SpecialityItem> {
   List<FoodItem> specialFoodItems = [];
 
-  Widget buildText(String title) {
+  Widget buildText(String title, Size mediaQuery) {
     return CText(
       text: title,
       textColor: Colors.white,
-      fontSize: 18,
+      fontSize: mediaQuery.width * 0.045,
     );
   }
 
@@ -39,7 +39,7 @@ class _SpecialityItemState extends State<SpecialityItem> {
                 : foodItem.specialItems;
         return specialFoodItems.length != 0
             ? Container(
-                height: 135,
+                height: mediaQuery.width * 0.32,
                 child: ListView.builder(
                   physics: BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
@@ -55,6 +55,7 @@ class _SpecialityItemState extends State<SpecialityItem> {
                         boxShadow: boxShadow,
                       ),
                       width: mediaQuery.width * 0.9,
+                      height: mediaQuery.width * 0.32,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -64,14 +65,14 @@ class _SpecialityItemState extends State<SpecialityItem> {
                                     image: CachedNetworkImageProvider(
                                       specialFoodItems[index].imageUrl[0],
                                     ),
-                                    height: mediaQuery.height * 0.3,
-                                    width: mediaQuery.width * 0.275,
+                                    height: mediaQuery.height,
+                                    width: mediaQuery.width * 0.26,
                                     fit: BoxFit.cover,
                                   )
                                 : Container(
                                     child: Center(child: Text("No Image")),
-                                    height: mediaQuery.height * 0.3,
-                                    width: mediaQuery.width * 0.275,
+                                    height: mediaQuery.height,
+                                    width: mediaQuery.width * 0.26,
                                   ),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10.0),
@@ -100,21 +101,20 @@ class _SpecialityItemState extends State<SpecialityItem> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          specialFoodItems[index].foodName,
-                                          style: TextStyle(fontSize: 20),
+                                        CText(
+                                          text:
+                                              specialFoodItems[index].foodName,
+                                          fontSize: mediaQuery.width * 0.05,
                                           maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        SizedBox(height: 5),
-                                        Text(
-                                          specialFoodItems[index].description,
-                                          style: TextStyle(
-                                            fontSize: 13,
-                                            color: Colors.grey[600],
-                                          ),
+                                        SizedBox(
+                                            height: mediaQuery.height * 0.005),
+                                        CText(
+                                          text: specialFoodItems[index]
+                                              .description,
+                                          fontSize: mediaQuery.width * 0.03,
+                                          textColor: Colors.grey[600],
                                           maxLines: 3,
-                                          overflow: TextOverflow.ellipsis,
                                         ),
                                       ],
                                     ),
@@ -125,14 +125,14 @@ class _SpecialityItemState extends State<SpecialityItem> {
                           ),
                           SizedBox(width: 10),
                           Container(
-                            width: 90,
+                            width: mediaQuery.width * 0.22,
                             alignment: Alignment.center,
-                            height: 120,
                             child: !isEditScreen
                                 ? buildText(
-                                    "${specialFoodItems[index].price} ₹")
+                                    "${specialFoodItems[index].price} ₹",
+                                    mediaQuery)
                                 : GestureDetector(
-                                    child: buildText('Edit'),
+                                    child: buildText('Edit', mediaQuery),
                                     onTap: () {
                                       Navigator.of(context).pushNamed(
                                           SEditItems.routeName,

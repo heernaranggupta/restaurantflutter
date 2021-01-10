@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:orderingsystem/Components/CIconData.dart';
 import 'package:orderingsystem/Components/CLoadingIndicator.dart';
 import 'package:orderingsystem/Components/CText.dart';
+import 'package:orderingsystem/Models/Category.dart';
 import 'package:orderingsystem/Models/FoodItem.dart';
 import 'package:orderingsystem/Screens/s_add_items.dart';
+import 'package:orderingsystem/Widgets/category_filter.dart';
 import 'package:orderingsystem/Widgets/other_food_items.dart';
 import 'package:orderingsystem/Widgets/speciality_item.dart';
 import 'package:orderingsystem/widgets/items_not_available.dart';
@@ -17,7 +19,9 @@ class SHome extends StatefulWidget {
 }
 
 class _SHomeState extends State<SHome> {
+  String filterId;
   bool _isLoading = false;
+  List<Categories> categories;
 
   SizedBox buildSizedBox(Size mediaQuery) =>
       SizedBox(width: mediaQuery.width * 0.04);
@@ -35,9 +39,21 @@ class _SHomeState extends State<SHome> {
     await FoodItem().getAllFoodItems().catchError((error) {
       print(error);
     });
-
+    categories = await FoodItem().categories().catchError((error) {
+      print(error);
+    });
     setState(() {
       _isLoading = false;
+    });
+  }
+
+  void onFilterChange(String id) {
+    setState(() {
+      if (filterId == id) {
+        filterId = null;
+      } else {
+        filterId = id;
+      }
     });
   }
 
@@ -215,13 +231,13 @@ class _SHomeState extends State<SHome> {
                       ),
                     ),
                     SpecialityItem(),
-                    Divider(thickness: 1, indent: 20, endIndent: 20),
-                    OtherFoodItems(),
+                    CategoryFilter(categories, onFilterChange, filterId),
+                    OtherFoodItems(filterId),
                     Divider(thickness: 1, indent: 20, endIndent: 20),
                     Padding(
                       padding: const EdgeInsets.only(left: 15.0, top: 10),
                       child: CText(
-                        text: 'Not Available',
+                        text: 'Unavailable',
                         fontSize: 17,
                       ),
                     ),

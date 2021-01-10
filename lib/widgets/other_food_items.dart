@@ -9,18 +9,22 @@ import '../Models/FoodItem.dart';
 import '../constants.dart';
 
 class OtherFoodItems extends StatefulWidget {
+  final String filterId;
+
+  OtherFoodItems(this.filterId);
   @override
   _OtherFoodItemsState createState() => _OtherFoodItemsState();
 }
 
 class _OtherFoodItemsState extends State<OtherFoodItems> {
-  List<FoodItem> otherFoodItems;
+  List<FoodItem> otherFoodItems = [];
+  List<FoodItem> otherFoodItems1 = [];
 
-  Widget buildText(String title) {
+  Widget buildText(String title, Size mediaQuery) {
     return CText(
       text: title,
       textColor: Colors.white,
-      fontSize: 18,
+      fontSize: mediaQuery.width * 0.045,
     );
   }
 
@@ -37,13 +41,27 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
                     .where((element) => (!element.isVeg))
                     .toList()
                 : foodItem.otherItems;
-        return otherFoodItems.length != 0
+
+        otherFoodItems1.clear();
+        if (widget.filterId != null) {
+          otherFoodItems.forEach((element) {
+            element.category.forEach((category) {
+              if (category == widget.filterId) {
+                otherFoodItems1.add(element);
+              }
+            });
+          });
+        } else {
+          otherFoodItems1 = otherFoodItems;
+        }
+
+        return otherFoodItems1.length != 0
             ? Container(
-                height: otherFoodItems.length * 125.0,
                 child: ListView.builder(
+                  shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   padding: const EdgeInsets.only(right: 20),
-                  itemCount: otherFoodItems.length,
+                  itemCount: otherFoodItems1.length,
                   itemBuilder: (ctx, index) => Container(
                     margin: EdgeInsets.only(top: 10, bottom: 10, left: 15),
                     decoration: BoxDecoration(
@@ -52,24 +70,24 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
                       boxShadow: boxShadow,
                     ),
                     width: mediaQuery.width * 0.9,
-                    height: 104,
+                    height: mediaQuery.width * 0.25,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ClipRRect(
-                          child: otherFoodItems[index].imageUrl != null
+                          child: otherFoodItems1[index].imageUrl != null
                               ? Image(
                                   image: CachedNetworkImageProvider(
-                                    otherFoodItems[index].imageUrl[0],
+                                    otherFoodItems1[index].imageUrl[0],
                                   ),
-                                  height: mediaQuery.height * 0.3,
-                                  width: mediaQuery.width * 0.275,
+                                  height: mediaQuery.height,
+                                  width: mediaQuery.width * 0.26,
                                   fit: BoxFit.cover,
                                 )
                               : Container(
                                   child: Center(child: Text("No Image")),
-                                  height: mediaQuery.height * 0.3,
-                                  width: mediaQuery.width * 0.275,
+                                  height: mediaQuery.height,
+                                  width: mediaQuery.width * 0.26,
                                 ),
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10.0),
@@ -97,21 +115,19 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
                                         CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(
-                                        otherFoodItems[index].foodName,
-                                        style: TextStyle(fontSize: 20),
+                                      CText(
+                                        text: otherFoodItems1[index].foodName,
+                                        fontSize: mediaQuery.width * 0.05,
                                         maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      SizedBox(height: 5),
-                                      Text(
-                                        otherFoodItems[index].description,
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          color: Colors.grey[600],
-                                        ),
+                                      SizedBox(
+                                          height: mediaQuery.height * 0.005),
+                                      CText(
+                                        text:
+                                            otherFoodItems1[index].description,
+                                        fontSize: mediaQuery.width * 0.03,
+                                        textColor: Colors.grey[600],
                                         maxLines: 3,
-                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ],
                                   ),
@@ -122,18 +138,18 @@ class _OtherFoodItemsState extends State<OtherFoodItems> {
                         ),
                         SizedBox(width: 10),
                         Container(
-                          width: 90,
+                          width: mediaQuery.width * 0.22,
                           alignment: Alignment.center,
-                          height: 120,
                           child: !isEditScreen
-                              ? buildText("${otherFoodItems[index].price} ₹")
+                              ? buildText("${otherFoodItems1[index].price} ₹",
+                                  mediaQuery)
                               : GestureDetector(
-                                  child: buildText('Edit'),
+                                  child: buildText('Edit', mediaQuery),
                                   onTap: () {
                                     Navigator.of(context).pushNamed(
                                         SEditItems.routeName,
                                         arguments:
-                                            otherFoodItems[index].foodId);
+                                            otherFoodItems1[index].foodId);
                                   },
                                 ),
                           decoration: BoxDecoration(
