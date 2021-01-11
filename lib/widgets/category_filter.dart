@@ -17,10 +17,12 @@ class CategoryFilter extends StatelessWidget {
 
     return CContainer(
       borderRadius: BorderRadius.circular(10),
+      width: mediaQuery.width * 0.9,
       height: mediaQuery.height * 0.14,
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      margin: EdgeInsets.symmetric(
+          horizontal: 15, vertical: mediaQuery.height * 0.01),
       child: ListView.builder(
-        padding: EdgeInsets.fromLTRB(15, 8, 0, 0),
+        padding: EdgeInsets.fromLTRB(15, mediaQuery.height * 0.015, 0, 0),
         physics: BouncingScrollPhysics(),
         itemCount: _categories.length,
         scrollDirection: Axis.horizontal,
@@ -34,25 +36,30 @@ class CategoryFilter extends StatelessWidget {
               child: Column(
                 children: [
                   CContainer(
-                    width: mediaQuery.width * 0.14,
+                    width: mediaQuery.height * 0.08,
+                    height: mediaQuery.height * 0.08,
                     padding: EdgeInsets.all(3),
                     borderRadius: BorderRadius.circular(50),
                     border: Border.all(
                       color: _categories[index].categoryId == filterId
                           ? fontColor
                           : appColor,
-                      width: 2,
+                      width: 2.5,
                     ),
-                    child: Image(
-                      fit: BoxFit.fill,
-                      image:
-                          CachedNetworkImageProvider(_categories[index].imgUrl),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(50),
+                      child: Image(
+                        fit: BoxFit.cover,
+                        image: CachedNetworkImageProvider(
+                          _categories[index].imgUrl,
+                        ),
+                      ),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: mediaQuery.height * 0.01),
                   CText(
                     text: _categories[index].categoryName,
-                    fontSize: mediaQuery.width * 0.035,
+                    fontSize: mediaQuery.height * 0.02,
                   )
                 ],
               ),
