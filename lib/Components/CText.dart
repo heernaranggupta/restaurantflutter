@@ -7,10 +7,12 @@ class CText extends StatelessWidget {
   final Color textColor;
   final double fontSize;
   final TextAlign textAlign;
+  final FontWeight fontWeight;
 
   CText({
     this.fontSize,
     this.textAlign,
+    this.fontWeight,
     this.maxLines = 1,
     @required this.text,
     this.textColor = fontColor,
@@ -22,6 +24,7 @@ class CText extends StatelessWidget {
       textAlign: textAlign ?? TextAlign.start,
       maxLines: maxLines,
       style: TextStyle(
+        fontWeight: fontWeight,
         fontSize: fontSize,
         color: textColor,
       ),

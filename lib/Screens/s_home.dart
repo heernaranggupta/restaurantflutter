@@ -6,6 +6,7 @@ import 'package:orderingsystem/Components/CText.dart';
 import 'package:orderingsystem/Models/Category.dart';
 import 'package:orderingsystem/Models/FoodItem.dart';
 import 'package:orderingsystem/Screens/s_add_items.dart';
+import 'package:orderingsystem/Screens/s_approve_orders.dart';
 import 'package:orderingsystem/Widgets/category_filter.dart';
 import 'package:orderingsystem/Widgets/other_food_items.dart';
 import 'package:orderingsystem/Widgets/speciality_item.dart';
@@ -39,7 +40,7 @@ class _SHomeState extends State<SHome> {
     await FoodItem().getAllFoodItems().catchError((error) {
       print(error);
     });
-    categories = await FoodItem().categories().catchError((error) {
+    categories = await Categories().getCategories().catchError((error) {
       print(error);
     });
     setState(() {
@@ -88,7 +89,9 @@ class _SHomeState extends State<SHome> {
               codePoint: 0xe902,
               fontFamily: 'dashboardIcon',
             ),
-            onTap: () {}),
+            onTap: () {
+              Navigator.of(context).pushNamed(SApproveOrders.routeName);
+            }),
         buildSizedBox(mediaQuery),
         GestureDetector(
             child: CIconData(

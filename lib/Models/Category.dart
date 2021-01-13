@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Categories {
   Categories({
     this.categoryId,
@@ -23,4 +25,16 @@ class Categories {
         "categoryName": categoryName,
         "imgUrl": imgUrl,
       };
+
+  Future<dynamic> getCategories() async {
+    List<Categories> _categoryList = [];
+    FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+    await firestoreInstance
+        .collection('Categories')
+        .get()
+        .then((querySnapshot) => querySnapshot.docs.forEach((result) {
+              _categoryList.add(Categories.fromJson(result.data()));
+            }));
+    return _categoryList;
+  }
 }

@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:orderingsystem/Models/Category.dart';
 
 class FoodItem with ChangeNotifier {
   static List<FoodItem> _allItems = [];
@@ -144,17 +143,5 @@ class FoodItem with ChangeNotifier {
         .doc(foodItem.foodId)
         .update(foodItem.toJson())
         .then((value) => print('Successss!!!'));
-  }
-
-  Future<dynamic> categories() async {
-    List<Categories> _categoryList = [];
-    FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
-    await firestoreInstance
-        .collection('Categories')
-        .get()
-        .then((querySnapshot) => querySnapshot.docs.forEach((result) {
-              _categoryList.add(Categories.fromJson(result.data()));
-            }));
-    return _categoryList;
   }
 }

@@ -9,6 +9,7 @@ import 'package:orderingsystem/Screens/s_home.dart';
 import 'package:provider/provider.dart';
 
 import './constants.dart';
+import 'Screens/s_approve_orders.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: fontColor,
           fontFamily: 'Roboto',
+          accentColor: fontColor,
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           iconTheme: IconThemeData(
@@ -59,6 +61,8 @@ class MyApp extends StatelessWidget {
             case SEditItems.routeName:
               return CupertinoPageRoute(
                   builder: (_) => SEditItems(foodId: foodId));
+            case SApproveOrders.routeName:
+              return CupertinoPageRoute(builder: (_) => SApproveOrders());
           }
         },
       ),
