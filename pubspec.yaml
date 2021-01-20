@@ -33,6 +33,7 @@ dependencies:
   intl: ^0.16.1
   path_provider: ^1.6.24
   provider: ^4.3.2+3
+  collection: ^1.14.13
 
 dev_dependencies:
   flutter_test:

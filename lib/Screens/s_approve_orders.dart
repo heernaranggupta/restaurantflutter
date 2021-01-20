@@ -5,6 +5,7 @@ import 'package:orderingsystem/Components/CText.dart';
 import 'package:intl/intl.dart';
 import 'package:orderingsystem/Models/Orders.dart';
 import 'package:orderingsystem/constants.dart';
+import 'package:collection/collection.dart';
 
 class SApproveOrders extends StatefulWidget {
   static const routeName = 'approve-orders';
@@ -18,6 +19,9 @@ class _SApproveOrdersState extends State<SApproveOrders> {
   List<Orders> _ordersList = [];
   List<Orders> _approvedOrders = [];
   List<Orders> _yetToApproveOrders = [];
+  Map groupedApprovedOrders;
+  Map groupedYetToApproveOrders;
+
 
   @override
   void initState() {
@@ -42,6 +46,17 @@ class _SApproveOrdersState extends State<SApproveOrders> {
           ? _approvedOrders.add(element)
           : _yetToApproveOrders.add(element),
     );
+
+    groupedApprovedOrders = groupBy(_approvedOrders, (Orders order) {
+      return order.table;
+    });
+
+    groupedYetToApproveOrders = groupBy(_yetToApproveOrders, (Orders order) {
+      return order.table;
+    });
+
+    print(groupedApprovedOrders.keys.length);
+    print(groupedYetToApproveOrders.keys.length);
 
     setState(() {
       _isLoading = false;
@@ -369,7 +384,7 @@ class _SApproveOrdersState extends State<SApproveOrders> {
                           : Padding(
                               padding: const EdgeInsets.symmetric(vertical: 25),
                               child: CText(
-                                text: 'No Orders To Approve',
+                                text: 'No new approved orders',
                               ),
                             ),
                     ],
