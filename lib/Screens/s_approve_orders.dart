@@ -21,7 +21,7 @@ class _SApproveOrdersState extends State<SApproveOrders> {
   List<Orders> _yetToApproveOrders = [];
   Map groupedApprovedOrders;
   Map groupedYetToApproveOrders;
-
+  List<bool> isExpanded = [];
 
   @override
   void initState() {
@@ -55,8 +55,9 @@ class _SApproveOrdersState extends State<SApproveOrders> {
       return order.table;
     });
 
-    print(groupedApprovedOrders.keys.length);
-    print(groupedYetToApproveOrders.keys.length);
+    print(_yetToApproveOrders.length);
+
+    isExpanded = List.filled(groupedYetToApproveOrders.keys.toList().length, true);
 
     setState(() {
       _isLoading = false;
@@ -114,101 +115,257 @@ class _SApproveOrdersState extends State<SApproveOrders> {
                         shrinkWrap: true,
                         itemCount: groupedYetToApproveOrders.length,
                         itemBuilder: (context, index) {
-                          print(groupedYetToApproveOrders.entries.where(
-                                  (element) => element.key == groupedYetToApproveOrders.keys.toList()[index]));
-                          return CContainer(
-                                margin: EdgeInsets.only(bottom: 20),
-                                height: 100,
-                                borderRadius: BorderRadius.circular(10),
-                                child: Row(
-                                  children: [
-                                    CContainer(
-                                      height: null,
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10)),
-                                      child: CText(
-                                          text:
-                                              groupedYetToApproveOrders.keys.toList()[index]),
-                                      width: mediaQuery.width * 0.1,
-                                    ),
-                                    Expanded(
-                                      child: CContainer(
-                                        padding: EdgeInsets.all(8),
-                                        alignment: Alignment.centerLeft,
-                                        height: 100,
+                          var total = 0;
+                          groupedYetToApproveOrders.values
+                              .toList()[index]
+                              .forEach((element) =>
+                                  total += (element.order[0]['total']));
+
+                          var quantity = 0;
+                          groupedYetToApproveOrders.values
+                              .toList()[index]
+                              .forEach((element) =>
+                                  quantity += (element.order[0]['qty']));
+
+
+                          return Stack(
+                            children: [
+                              Offstage(
+                                offstage: isExpanded[index],
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(maxHeight: 600),
+                                  child: ListView.builder(
+                                    padding: EdgeInsets.only(top: 130),
+                                      itemCount: _yetToApproveOrders
+                                          .where((element) =>
+                                              element.table ==
+                                              groupedYetToApproveOrders.keys
+                                                  .toList()[index])
+                                          .toList()
+                                          .length,
+                                      itemBuilder: (context, i) {
+                                        print(_yetToApproveOrders
+                                            .where((element) =>
+                                        element.table ==
+                                            groupedYetToApproveOrders.keys
+                                                .toList()[index])
+                                            .toList()[i].order);
+                                        return Container(
+                                          child: Row(
+                                            // mainAxisAlignment:
+                                            //     MainAxisAlignment
+                                            //         .spaceAround,
+                                            children: [
+                                              CContainer(
+                                                height: 100,
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(10),
+                                                    bottomLeft: Radius.circular(10)),
+                                                child: CText(
+                                                    text: (i+1).toString()),
+                                                width: mediaQuery.width * 0.1,
+                                              ),
+                                              Expanded(
+                                                child: CContainer(
+                                                  // margin:
+                                                  //     EdgeInsets.only(right:85),
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  height: 100,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft: Radius
+                                                              .circular(10),
+                                                          bottomLeft: Radius
+                                                              .circular(
+                                                                  10)),
+                                                  child: Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      CText(
+                                                        text: _yetToApproveOrders
+                                                            .where((element) =>
+                                                                element
+                                                                    .table ==
+                                                                groupedYetToApproveOrders
+                                                                        .keys
+                                                                        .toList()[
+                                                                    index])
+                                                            .toList()[i]
+                                                            .order[0]['foodName'],
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                      SizedBox(height: 5),
+                                                      CText(
+                                                        text: _yetToApproveOrders
+                                                                .where((element) =>
+                                                                    element
+                                                                        .table ==
+                                                                    groupedYetToApproveOrders
+                                                                        .keys
+                                                                        .toList()[index])
+                                                                .toList()[i]
+                                                                .time ??
+                                                            '-',
+                                                        maxLines: 2,
+                                                        fontWeight:
+                                                            FontWeight
+                                                                .normal,
+                                                      ),
+                                                      SizedBox(height: 5),
+                                                      CText(
+                                                        text: _yetToApproveOrders
+                                                            .where((element) =>
+                                                        element
+                                                            .table ==
+                                                            groupedYetToApproveOrders
+                                                                .keys
+                                                                .toList()[index])
+                                                            .toList()[i]
+                                                            .order[0]['total'].toString() + 'Rs',
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Align(
+                                                child: CContainer(
+                                                    borderRadius:
+                                                        BorderRadius.only(
+                                                            topLeft: Radius
+                                                                .circular(10),
+                                                            bottomLeft: Radius
+                                                                .circular(
+                                                                    10)),
+                                                    height: 100,
+                                                    width: mediaQuery.width *
+                                                        0.1,
+                                                    child: CText(
+                                                      text:
+                                                      _yetToApproveOrders
+                                                          .where((element) =>
+                                                      element
+                                                          .table ==
+                                                          groupedYetToApproveOrders
+                                                              .keys
+                                                              .toList()[index])
+                                                          .toList()[i]
+                                                          .order[0]['qty'].toString(),
+                                                    )),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    isExpanded[index] = !isExpanded[index];
+                                  });
+                                },
+                                child: CContainer(
+                                  margin: EdgeInsets.only(bottom: 20),
+                                  height: 100,
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Row(
+                                    children: [
+                                      CContainer(
+                                        height: null,
                                         borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(10),
                                             bottomLeft: Radius.circular(10)),
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            CText(
-                                              text: _yetToApproveOrders[index]
-                                                  .order[i]['foodName'],
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            SizedBox(height: 5),
-                                            CText(
-                                              text: _yetToApproveOrders[index]
-                                                      .order[i]['moreInfo'] ??
-                                                  '-',
-                                              maxLines: 2,
-                                              fontWeight: FontWeight.normal,
-                                            ),
-                                            SizedBox(height: 5),
-                                            CText(
-                                              text: _yetToApproveOrders[index]
-                                                      .order[i]['total']
-                                                      .toString() +
-                                                  ' Rs',
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    CContainer(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(10),
-                                          bottomLeft: Radius.circular(10)),
-                                      height: null,
-                                      width: mediaQuery.width * 0.1,
-                                      child: CText(
-                                          text:
-                                          _yetToApproveOrders[index]
-                                              .order[i]['qty']
-                                              .toString()),
-                                    ),
-                                    CContainer(
-                                      height: null,
-                                      backgroundColor: fontColor,
-                                      borderRadius: BorderRadius.circular(10),
-                                      width: mediaQuery.width * 0.22,
-                                      alignment: Alignment.center,
-                                      child: GestureDetector(
                                         child: CText(
-                                          text: 'Approve',
-                                          textColor: Colors.white,
-                                        ),
-                                        onTap: () async {
-                                          setState(() {
-                                            _isLoading = true;
-                                          });
-                                          await Orders().updateOrder(
-                                              _yetToApproveOrders[index].docId,
-                                              true);
-                                          getData();
-                                        },
+                                            text: groupedYetToApproveOrders.keys
+                                                .toList()[index]),
+                                        width: mediaQuery.width * 0.1,
                                       ),
-                                    )
-                                  ],
+                                      Expanded(
+                                        child: CContainer(
+                                          padding: EdgeInsets.all(8),
+                                          alignment: Alignment.centerLeft,
+                                          height: 100,
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10)),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              CText(
+                                                text: '#4300043',
+                                                // groupedYetToApproveOrders.values.toList()[index]
+                                                //     .order['foodName'],
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              SizedBox(height: 5),
+                                              CText(
+                                                text:
+                                                    // groupedYetToApproveOrders.values.toList()[index]
+                                                    //         .order['moreInfo'] ??
+                                                    '-',
+                                                maxLines: 2,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                              SizedBox(height: 5),
+                                              CText(
+                                                text: '$total Rs',
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      CContainer(
+                                          borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10)),
+                                          height: null,
+                                          width: mediaQuery.width * 0.1,
+                                          child: CText(
+                                            text: quantity.toString(),
+                                          )
+                                      ),
+                                      CContainer(
+                                        height: null,
+                                        backgroundColor: fontColor,
+                                        borderRadius: BorderRadius.circular(10),
+                                        width: mediaQuery.width * 0.22,
+                                        alignment: Alignment.center,
+                                        child: GestureDetector(
+                                          child: CText(
+                                            text: 'Approve',
+                                            textColor: Colors.white,
+                                          ),
+                                          onTap: () async {
+                                            setState(() {
+                                              _isLoading = true;
+                                            });
+                                            await Orders().updateOrder(
+                                                _yetToApproveOrders[index].docId,
+                                                true);
+                                            getData();
+                                          },
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              );
-                            },
+                              ),
+                            ],
+                          );
+                        },
                       )
                     ],
                   ),
