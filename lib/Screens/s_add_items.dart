@@ -829,6 +829,7 @@ class _SAddItemsState extends State<SAddItems> {
                                         isCategoryExpanded =
                                             !isCategoryExpanded;
                                       });
+                                      print(isCategoryExpanded);
                                     },
                                   ),
                                 ),
