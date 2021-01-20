@@ -112,14 +112,11 @@ class _SApproveOrdersState extends State<SApproveOrders> {
                       ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: _yetToApproveOrders.length,
+                        itemCount: groupedYetToApproveOrders.length,
                         itemBuilder: (context, index) {
-                          return ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: _yetToApproveOrders[index].order.length,
-                            itemBuilder: (ctx, i) {
-                              return CContainer(
+                          print(groupedYetToApproveOrders.entries.where(
+                                  (element) => element.key == groupedYetToApproveOrders.keys.toList()[index]));
+                          return CContainer(
                                 margin: EdgeInsets.only(bottom: 20),
                                 height: 100,
                                 borderRadius: BorderRadius.circular(10),
@@ -132,7 +129,7 @@ class _SApproveOrdersState extends State<SApproveOrders> {
                                           bottomLeft: Radius.circular(10)),
                                       child: CText(
                                           text:
-                                              _yetToApproveOrders[index].table),
+                                              groupedYetToApproveOrders.keys.toList()[index]),
                                       width: mediaQuery.width * 0.1,
                                     ),
                                     Expanded(
@@ -181,7 +178,8 @@ class _SApproveOrdersState extends State<SApproveOrders> {
                                       height: null,
                                       width: mediaQuery.width * 0.1,
                                       child: CText(
-                                          text: _yetToApproveOrders[index]
+                                          text:
+                                          _yetToApproveOrders[index]
                                               .order[i]['qty']
                                               .toString()),
                                     ),
@@ -211,9 +209,7 @@ class _SApproveOrdersState extends State<SApproveOrders> {
                                 ),
                               );
                             },
-                          );
-                        },
-                      ),
+                      )
                     ],
                   ),
                 ),
