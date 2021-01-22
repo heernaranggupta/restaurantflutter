@@ -35,6 +35,7 @@ class _SAddItemsState extends State<SAddItems> {
   bool _isVeg = true;
   bool _isSpecial = false;
   bool _isAvailable = false;
+  bool _isCustomizable = false;
   String _firstImageURL;
   String _secondImageURL;
   String _thirdImageURL;
@@ -456,6 +457,7 @@ class _SAddItemsState extends State<SAddItems> {
       isVeg: _isVeg,
       isSpecial: _isSpecial,
       isAvailable: _isAvailable,
+      isCustomizable: _isCustomizable,
       imageUrl: [
         _firstImageURL,
         _secondImageURL,
@@ -615,15 +617,34 @@ class _SAddItemsState extends State<SAddItems> {
                                     ],
                                   ),
                                   buildHeightSizedBox(mediaQuery),
-                                  buildBoolBox(
-                                    value: _isAvailable,
-                                    mediaQuery: mediaQuery,
-                                    title: 'Available',
-                                    onTap: () {
-                                      setState(() {
-                                        _isAvailable = !_isAvailable;
-                                      });
-                                    },
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: buildBoolBox(
+                                          value: _isAvailable,
+                                          mediaQuery: mediaQuery,
+                                          title: 'Available',
+                                          onTap: () {
+                                            setState(() {
+                                              _isAvailable = !_isAvailable;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      buildWidthSizedBox(mediaQuery),
+                                      Expanded(
+                                        child: buildBoolBox(
+                                          value: _isCustomizable,
+                                          mediaQuery: mediaQuery,
+                                          title: 'Customizable',
+                                          onTap: () {
+                                            setState(() {
+                                              _isCustomizable = !_isCustomizable;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),

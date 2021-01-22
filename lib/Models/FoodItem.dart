@@ -30,6 +30,7 @@ class FoodItem with ChangeNotifier {
     this.foodName,
     this.imageUrl,
     this.isAvailable,
+    this.isCustomizable,
     this.isSpecial,
     this.isVeg,
     this.moreInfo,
@@ -45,6 +46,7 @@ class FoodItem with ChangeNotifier {
   String foodName;
   List<dynamic> imageUrl;
   bool isAvailable;
+  bool isCustomizable;
   bool isSpecial;
   bool isVeg;
   String moreInfo;
