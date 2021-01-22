@@ -60,11 +60,12 @@ class _SHomeState extends State<SHome> {
     if(query.isNotEmpty) {
       List<FoodItem> dummyListData = List<FoodItem>();
       dummySearchList.forEach((item) {
-        print(item.foodName);
-        if(item.foodName.contains(query)) {
+        print(item.foodName.toLowerCase());
+        if(item.foodName.toLowerCase().contains(query.toLowerCase())) {
+          print('99');
           dummyListData.add(item);
         }
-        print('dummy' + dummyListData.last.foodName);
+
       });
       print(dummyListData.length);
       print('444');
@@ -182,6 +183,10 @@ class _SHomeState extends State<SHome> {
                       textAlignVertical: TextAlignVertical.center,
                       cursorColor: fontColor,
                       onChanged: (value) {
+                        print(value);
+                        filterSearchResults(value);
+                      },
+                      onSubmitted: (value) {
                         print(value);
                         filterSearchResults(value);
                       },
