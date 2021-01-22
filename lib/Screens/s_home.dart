@@ -11,6 +11,8 @@ import 'package:orderingsystem/Widgets/category_filter.dart';
 import 'package:orderingsystem/Widgets/other_food_items.dart';
 import 'package:orderingsystem/Widgets/speciality_item.dart';
 import 'package:orderingsystem/widgets/items_not_available.dart';
+import 'package:orderingsystem/widgets/search_results.dart';
+import 'package:search_widget/search_widget.dart';
 import '../constants.dart';
 
 class SHome extends StatefulWidget {
@@ -22,7 +24,9 @@ class SHome extends StatefulWidget {
 class _SHomeState extends State<SHome> {
   String filterId;
   bool _isLoading = false;
+  bool _isSearching = false;
   List<Categories> categories;
+  List<FoodItem> searchedItems;
 
   SizedBox buildSizedBox(Size mediaQuery) =>
       SizedBox(width: mediaQuery.width * 0.04);
@@ -36,6 +40,7 @@ class _SHomeState extends State<SHome> {
   Future<void> getData() async {
     setState(() {
       _isLoading = true;
+      _isSearching = false;
     });
     await FoodItem().getAllFoodItems().catchError((error) {
       print(error);
@@ -46,6 +51,44 @@ class _SHomeState extends State<SHome> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  void filterSearchResults(String query) {
+
+    List<FoodItem> dummySearchList = List<FoodItem>();
+    dummySearchList.addAll(FoodItem().allItems);
+    if(query.isNotEmpty) {
+      List<FoodItem> dummyListData = List<FoodItem>();
+      dummySearchList.forEach((item) {
+        print(item.foodName);
+        if(item.foodName.contains(query)) {
+          dummyListData.add(item);
+        }
+        print('dummy' + dummyListData.last.foodName);
+      });
+      print(dummyListData.length);
+      print('444');
+      // print('length----${searchedItems.length}');
+      print('555');
+      // searchedItems.clear();
+      print('666');
+      setState(() {
+        print('4');
+        _isSearching = true;
+        searchedItems = dummyListData;
+        print('5b');
+      });
+
+
+      return;
+    } else {
+      setState(() {
+
+        searchedItems.clear();
+        _isSearching = false;
+
+      });
+    }
   }
 
   void onFilterChange(String id) {
@@ -62,6 +105,7 @@ class _SHomeState extends State<SHome> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
 
+    print('is Searching---$_isSearching');
     AppBar appBar = AppBar(
       automaticallyImplyLeading: false,
       elevation: 0,
@@ -137,6 +181,10 @@ class _SHomeState extends State<SHome> {
                     child: TextField(
                       textAlignVertical: TextAlignVertical.center,
                       cursorColor: fontColor,
+                      onChanged: (value) {
+                        print(value);
+                        filterSearchResults(value);
+                      },
                       decoration: InputDecoration(
                         prefixIcon: Icon(Icons.search, color: fontColor),
                         hintText: 'Search',
@@ -215,40 +263,47 @@ class _SHomeState extends State<SHome> {
     );
     return _isLoading
         ? CLoadingIndicator()
-        : Scaffold(
-            appBar: appBar,
-            body: RefreshIndicator(
-              color: fontColor,
-              displacement: 60,
-              onRefresh: getData,
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0, top: 10),
-                      child: CText(
-                        text: 'Our Speciality',
-                        fontSize: 17,
+        : GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+          },
+          child: Scaffold(
+              appBar: appBar,
+              body: RefreshIndicator(
+                color: fontColor,
+                displacement: 60,
+                onRefresh: getData,
+                child: SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: _isSearching
+                      ? SearchResults(searchedItems)
+                      : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0, top: 10),
+                        child: CText(
+                          text: 'Our Speciality',
+                          fontSize: 17,
+                        ),
                       ),
-                    ),
-                    SpecialityItem(),
-                    CategoryFilter(categories, onFilterChange, filterId),
-                    OtherFoodItems(filterId),
-                    Divider(thickness: 1, indent: 20, endIndent: 20),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0, top: 10),
-                      child: CText(
-                        text: 'Unavailable',
-                        fontSize: 17,
+                      SpecialityItem(),
+                      CategoryFilter(categories, onFilterChange, filterId),
+                      OtherFoodItems(filterId),
+                      Divider(thickness: 1, indent: 20, endIndent: 20),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0, top: 10),
+                        child: CText(
+                          text: 'Unavailable',
+                          fontSize: 17,
+                        ),
                       ),
-                    ),
-                    ItemsNotAvailable()
-                  ],
+                      ItemsNotAvailable()
+                    ],
+                  ),
                 ),
               ),
             ),
-          );
+        );
   }
 }
