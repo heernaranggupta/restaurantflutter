@@ -49,6 +49,7 @@ class Orders {
   Future<dynamic> getOrders() async {
     List<Orders> _ordersList = [];
     FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+
     await firestoreInstance
         .collection('Orders')
         .get()
@@ -58,9 +59,47 @@ class Orders {
     return _ordersList;
   }
 
-  Future<dynamic> updateOrder(String orderId, isApprove) async {
+  Future<void> updateOrder(String docId, isApprove) async {
     FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
-    await firestoreInstance.collection('Orders').doc(orderId).update(
+    await firestoreInstance.collection('Orders').doc(docId).update(
         {'isApprove': isApprove}).then((value) => print('Successsssss!!!'));
+  }
+
+  Future<void> deleteOrder(String docId) async {
+    FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+    await firestoreInstance.collection('Orders').doc(docId).delete();
+  }
+
+  Future<void> deleteParticularOrder(String docId, String orderId, List<dynamic> order, int index) async {
+    FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+    final order = await firestoreInstance
+        .collection('Orders')
+        .get()
+        .then((querySnapshot) => querySnapshot.docs
+          .where((element) => element.id == docId).toList());
+
+    print(order.first.data()['order'].length);
+
+
+    var newOrder = [];
+    for(var i=0; i<order.first.data()['order'].length; i++) {
+      if(i!=index){
+        newOrder.add(order.first.data()['order'][index]);
+      }
+    }
+
+    // print(newOrder.length);
+    // order.first.data().update(
+    //     'order', (value) => value[index].delete()
+    // );
+
+    if(newOrder.length == 0) {
+      FirebaseFirestore firestoreInstance = FirebaseFirestore.instance;
+      await firestoreInstance.collection('Orders').doc(docId).delete();
+    } else {
+      await firestoreInstance.collection('Orders').doc(docId).update(
+          {'order': newOrder}).then((value) => print('Successsssss!!!'));
+    }
+    // order.first.data()['order'] = newOrder;
   }
 }
