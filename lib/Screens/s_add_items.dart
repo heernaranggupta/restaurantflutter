@@ -939,25 +939,35 @@ class _SAddItemsState extends State<SAddItems> {
                                         return GestureDetector(
                                           onTap: () {
                                             setState(() {
-                                              _ingredientsList[index].value =
-                                                  !_ingredientsList[index]
-                                                      .value;
+                                              if(!_extraIngredientsList[index].value){
+                                                _ingredientsList[index].value =
+                                                    !_ingredientsList[index]
+                                                        .value;
 
-                                              _ingredientsToDisplay.clear();
-                                              _ingredientsList
-                                                  .forEach((element) {
-                                                if (element.value) {
-                                                  _ingredientsToDisplay
-                                                      .add(element);
-                                                }
-                                              });
-                                              _choosenIngredients.clear();
-                                              _ingredientsToDisplay
-                                                  .forEach((element) {
-                                                _choosenIngredients.putIfAbsent(
-                                                    element.id,
-                                                    () => element.value);
-                                              });
+                                                _ingredientsToDisplay.clear();
+                                                _ingredientsList
+                                                    .forEach((element) {
+                                                  if (element.value) {
+                                                    _ingredientsToDisplay
+                                                        .add(element);
+                                                  }
+                                                });
+                                                _choosenIngredients.clear();
+                                                _ingredientsToDisplay
+                                                    .forEach((element) {
+                                                  _choosenIngredients
+                                                      .putIfAbsent(element.id,
+                                                          () => element.value);
+                                                });
+                                              } else {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (ctx) => DialogBox(
+                                                      title: 'Ingredient already added !',
+                                                      isError: true,
+                                                    )
+                                                );
+                                              }
                                             });
                                           },
                                           child: CContainer(
@@ -1084,28 +1094,38 @@ class _SAddItemsState extends State<SAddItems> {
                                         return GestureDetector(
                                           onTap: () {
                                             setState(() {
-                                              _extraIngredientsList[index]
-                                                      .value =
-                                                  !_extraIngredientsList[index]
-                                                      .value;
+                                              if(!_ingredientsList[index].value) {
+                                                _extraIngredientsList[index]
+                                                    .value =
+                                                !_extraIngredientsList[index]
+                                                    .value;
 
-                                              _extraIngredientsToDisplay
-                                                  .clear();
-                                              _extraIngredientsList
-                                                  .forEach((element) {
-                                                if (element.value) {
-                                                  _extraIngredientsToDisplay
-                                                      .add(element);
-                                                }
-                                              });
-                                              _choosenExtraIngredients.clear();
-                                              _extraIngredientsToDisplay
-                                                  .forEach((element) {
-                                                _choosenExtraIngredients
-                                                    .putIfAbsent(element.id,
-                                                        () => element.value);
-                                              });
-                                              print(_choosenExtraIngredients);
+                                                _extraIngredientsToDisplay
+                                                    .clear();
+                                                _extraIngredientsList
+                                                    .forEach((element) {
+                                                  if (element.value) {
+                                                    _extraIngredientsToDisplay
+                                                        .add(element);
+                                                  }
+                                                });
+                                                _choosenExtraIngredients.clear();
+                                                _extraIngredientsToDisplay
+                                                    .forEach((element) {
+                                                  _choosenExtraIngredients
+                                                      .putIfAbsent(element.id,
+                                                          () => element.value);
+                                                });
+                                                print(_choosenExtraIngredients);
+                                              } else {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (ctx) => DialogBox(
+                                                      title: 'Ingredient already added !',
+                                                      isError: true,
+                                                  )
+                                                );
+                                              }
                                             });
                                           },
                                           child: Stack(

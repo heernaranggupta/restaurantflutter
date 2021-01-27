@@ -11,6 +11,9 @@ import 'package:provider/provider.dart';
 import './constants.dart';
 import 'Screens/s_approve_orders.dart';
 
+
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp().catchError((error) {
