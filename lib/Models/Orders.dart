@@ -77,10 +77,7 @@ class Orders {
         .get()
         .then((querySnapshot) => querySnapshot.docs
           .where((element) => element.id == docId).toList());
-
-    print(order.first.data()['order'].length);
-
-
+    
     var newOrder = [];
     for(var i=0; i<order.first.data()['order'].length; i++) {
       if(i!=index){
