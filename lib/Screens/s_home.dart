@@ -60,34 +60,21 @@ class _SHomeState extends State<SHome> {
     if(query.isNotEmpty) {
       List<FoodItem> dummyListData = List<FoodItem>();
       dummySearchList.forEach((item) {
-        print(item.foodName.toLowerCase());
         if(item.foodName.toLowerCase().contains(query.toLowerCase())) {
-          print('99');
           dummyListData.add(item);
         }
 
       });
-      print(dummyListData.length);
-      print('444');
-      // print('length----${searchedItems.length}');
-      print('555');
-      // searchedItems.clear();
-      print('666');
+
       setState(() {
-        print('4');
         _isSearching = true;
         searchedItems = dummyListData;
-        print('5b');
       });
-
-
       return;
     } else {
       setState(() {
-
         searchedItems.clear();
         _isSearching = false;
-
       });
     }
   }
@@ -106,7 +93,6 @@ class _SHomeState extends State<SHome> {
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
 
-    print('is Searching---$_isSearching');
     AppBar appBar = AppBar(
       automaticallyImplyLeading: false,
       elevation: 0,
