@@ -41,14 +41,16 @@ class _SApproveOrdersState extends State<SApproveOrders> {
               _isLoading) {
             return CLoadingIndicator();
           } else {
-            List<Orders> _ordersList = [];
+            // List<Orders> _ordersList = [];
             List<Orders> _yetToApproveOrders = [];
             List<Orders> _approvedOrders = [];
 
-            _ordersList.clear();
-            snapshot.data.docs.forEach((element) {
-              _ordersList.add(Orders.fromJson(element.data()));
-            });
+            // _ordersList.clear();
+            // snapshot.data.docs.forEach((element) {
+            //   _ordersList.add(Orders.fromJson(element.data()));
+            // });
+            //
+            // _ordersList.sort((a, b) => a.time.compareTo(b.time));
 
             snapshot.data.docs.forEach((element) {
               if (!element.data()['isApprove']) {
@@ -57,6 +59,12 @@ class _SApproveOrdersState extends State<SApproveOrders> {
                 _approvedOrders.add(Orders.fromJson(element.data()));
               }
             });
+
+            _yetToApproveOrders.sort((a, b) => a.time.compareTo(b.time));
+            _yetToApproveOrders = _yetToApproveOrders.reversed.toList();
+
+            _approvedOrders.sort((a, b) => a.time.compareTo(b.time));
+            _approvedOrders = _approvedOrders.reversed.toList();
 
             return Scaffold(
                 appBar: AppBar(
@@ -103,11 +111,6 @@ class _SApproveOrdersState extends State<SApproveOrders> {
                                   .toList()
                                   .length,
                               itemBuilder: (context, index) {
-                                // var quantity = 0;
-                                // _ordersList
-                                //     .where((element) => !element.isApprove)
-                                //     .forEach((element) =>
-                                //         quantity += (element.order[0]['qty']));
                                 return ApproveOrders(
                                     _yetToApproveOrders, update, index);
                               })
