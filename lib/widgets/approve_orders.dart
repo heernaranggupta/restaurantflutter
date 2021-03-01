@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:orderingsystem/Components/CContainer.dart';
 import 'package:orderingsystem/Components/CText.dart';
 import 'package:orderingsystem/Models/Orders.dart';
+import 'package:orderingsystem/Screens/s_approve_orders.dart';
 
 import '../constants.dart';
 import 'approved_orders.dart';
@@ -240,6 +241,7 @@ class _ApproveOrdersState extends State<ApproveOrders> {
                                     widget._yetToApproveOrders[widget.index].docId,
                                     true).then((_) => Scaffold.of(context)..removeCurrentSnackBar()
                                     ..showSnackBar(SnackBar(content: Text('Order ${widget._yetToApproveOrders[widget.index].orderId} is approved.'))));
+                                Navigator.of(context).popAndPushNamed(SApproveOrders.routeName);
                                 // widget.update();
                               },
                               child: CContainer(
