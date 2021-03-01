@@ -164,7 +164,7 @@ class _ApproveOrdersState extends State<ApproveOrders> {
                             topLeft: Radius.circular(10),
                             bottomLeft: Radius.circular(10)),
                         child: CText(
-                            text: widget._yetToApproveOrders[widget.index].table),
+                            text: widget._yetToApproveOrders[widget.index].table.toString()),
                         width: mediaQuery.width * 0.1,
                       ),
                       Expanded(

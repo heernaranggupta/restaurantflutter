@@ -139,7 +139,7 @@ class _ApprovedOrdersState extends State<ApprovedOrders> {
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(10),
                             bottomLeft: Radius.circular(10)),
-                        child: CText(text: widget._approvedOrders[widget.index].table),
+                        child: CText(text: widget._approvedOrders[widget.index].table.toString()),
                         width: mediaQuery.width * 0.1,
                       ),
                       Expanded(

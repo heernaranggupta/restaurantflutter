@@ -21,7 +21,7 @@ class Orders {
   String docId;
   List<dynamic> order;
   String specialNote;
-  String table;
+  int table;
 
   factory Orders.fromJson(Map<String, dynamic> json) => Orders(
         date: json["Date"],

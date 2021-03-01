@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (ctx) => FoodItem(),
       child: MaterialApp(
-        title: 'Foodito',
+        title: 'Restaurant Manager',
         home: SHome(),
         theme: ThemeData(
           primaryColor: fontColor,
