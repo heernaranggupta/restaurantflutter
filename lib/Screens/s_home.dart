@@ -54,16 +54,14 @@ class _SHomeState extends State<SHome> {
   }
 
   void filterSearchResults(String query) {
-
     List<FoodItem> dummySearchList = List<FoodItem>();
     dummySearchList.addAll(FoodItem().allItems);
-    if(query.isNotEmpty) {
+    if (query.isNotEmpty) {
       List<FoodItem> dummyListData = List<FoodItem>();
       dummySearchList.forEach((item) {
-        if(item.foodName.toLowerCase().contains(query.toLowerCase())) {
+        if (item.foodName.toLowerCase().contains(query.toLowerCase())) {
           dummyListData.add(item);
         }
-
       });
 
       setState(() {
@@ -104,19 +102,6 @@ class _SHomeState extends State<SHome> {
       actions: [
         GestureDetector(
             child: CIconData(
-              codePoint: 0xe900,
-              fontFamily: 'foodIcon',
-            ),
-            onTap: () {
-              setState(() {
-                if (isEditScreen) {
-                  isEditScreen = false;
-                }
-              });
-            }),
-        buildSizedBox(mediaQuery),
-        GestureDetector(
-            child: CIconData(
               codePoint: 0xe902,
               fontFamily: 'dashboardIcon',
             ),
@@ -137,6 +122,7 @@ class _SHomeState extends State<SHome> {
             child: CIconData(
               codePoint: 0xe900,
               fontFamily: 'editIcon',
+              color: isEditScreen ? Colors.red : null,
             ),
             onTap: () {
               setState(() {
@@ -255,10 +241,10 @@ class _SHomeState extends State<SHome> {
     return _isLoading
         ? CLoadingIndicator()
         : GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(new FocusNode());
-          },
-          child: Scaffold(
+            onTap: () {
+              FocusScope.of(context).requestFocus(new FocusNode());
+            },
+            child: Scaffold(
               appBar: appBar,
               body: RefreshIndicator(
                 color: fontColor,
@@ -269,32 +255,35 @@ class _SHomeState extends State<SHome> {
                   child: _isSearching
                       ? SearchResults(searchedItems)
                       : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0, top: 10),
-                        child: CText(
-                          text: 'Our Speciality',
-                          fontSize: 17,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 15.0, top: 10),
+                              child: CText(
+                                text: 'Our Speciality',
+                                fontSize: 17,
+                              ),
+                            ),
+                            SpecialityItem(),
+                            CategoryFilter(
+                                categories, onFilterChange, filterId),
+                            OtherFoodItems(filterId),
+                            Divider(thickness: 1, indent: 20, endIndent: 20),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 15.0, top: 10),
+                              child: CText(
+                                text: 'Unavailable',
+                                fontSize: 17,
+                              ),
+                            ),
+                            ItemsNotAvailable()
+                          ],
                         ),
-                      ),
-                      SpecialityItem(),
-                      CategoryFilter(categories, onFilterChange, filterId),
-                      OtherFoodItems(filterId),
-                      Divider(thickness: 1, indent: 20, endIndent: 20),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0, top: 10),
-                        child: CText(
-                          text: 'Unavailable',
-                          fontSize: 17,
-                        ),
-                      ),
-                      ItemsNotAvailable()
-                    ],
-                  ),
                 ),
               ),
             ),
-        );
+          );
   }
 }

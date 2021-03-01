@@ -23,21 +23,21 @@ class CDropdownRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context).size;
-    return Row(
-      children: [
-        CIconData(
-            codePoint: codePoint, fontFamily: fontFamily, iconSize: iconSize),
-        SizedBox(width: mediaQuery.width * 0.03),
-        Expanded(child: CText(text: title)),
-        GestureDetector(
-          child: Icon(
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: [
+          CIconData(
+              codePoint: codePoint, fontFamily: fontFamily, iconSize: iconSize),
+          SizedBox(width: mediaQuery.width * 0.03),
+          Expanded(child: CText(text: title)),
+          Icon(
             isExpanded ? Icons.arrow_drop_down : Icons.arrow_drop_up,
             color: fontColor,
             size: 35,
           ),
-          onTap: onTap,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

@@ -68,6 +68,8 @@ class FoodItem with ChangeNotifier {
         optional: json["optional"] == null ? null : json["optional"],
         price: json["price"] == null ? null : json["price"],
         timing: json["timing"] == null ? null : json["timing"],
+        isCustomizable:
+            json["isCustomize"] == null ? null : json["isCustomize"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -84,6 +86,7 @@ class FoodItem with ChangeNotifier {
         "optional": optional == null ? null : optional,
         "price": price == null ? null : price,
         "timing": timing == null ? null : timing,
+        "isCustomize": isCustomizable == null ? null : isCustomizable,
       };
 
   Future<dynamic> getAllFoodItems() async {

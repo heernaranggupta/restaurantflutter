@@ -16,6 +16,8 @@ import 'package:orderingsystem/Components/CLoadingIndicator.dart';
 import 'package:orderingsystem/Components/CText.dart';
 import 'package:orderingsystem/Components/CTextField.dart';
 import 'package:orderingsystem/Components/CUploadBottomSheet.dart';
+import 'package:orderingsystem/Components/dialog_box.dart';
+import 'package:orderingsystem/Components/show_error_dialog.dart';
 import 'package:orderingsystem/Models/Category.dart';
 import 'package:orderingsystem/Models/FoodItem.dart';
 import 'package:orderingsystem/Models/Ingredients.dart';
@@ -312,52 +314,83 @@ class _SEditItemsState extends State<SEditItems> {
   }
 
   void _addItem() async {
-    if ((foodItem.imageUrl[0] != null || _choosenFile0 != null) &&
-        (foodItem.imageUrl[1] != null || _choosenFile1 != null) &&
-        (foodItem.imageUrl[2] != null || _choosenFile2 != null) &&
-        (foodItem.imageUrl[3] != null || _choosenFile3 != null) &&
-        _foodNameController.text.isNotEmpty &&
-        _foodPriceController.text.isNotEmpty &&
-        _shortDescriptionController.text.isNotEmpty &&
-        _moreInfoController.text.isNotEmpty) {
-      setState(() {
-        _isLoading = true;
-      });
-      if (_choosenFile0 != null) {
-        foodItem.imageUrl[0] = await putFile(_choosenFile0);
-      }
-      if (_choosenFile1 != null) {
-        foodItem.imageUrl[1] = await putFile(_choosenFile1);
-      }
-      if (_choosenFile2 != null) {
-        foodItem.imageUrl[2] = await putFile(_choosenFile2);
-      }
-      if (_choosenFile3 != null) {
-        foodItem.imageUrl[3] = await putFile(_choosenFile3);
-      }
-
-      foodItem.foodName = _foodNameController.text.trim();
-      foodItem.price = _foodPriceController.text.trim();
-      foodItem.category = _choosenCategories;
-      foodItem.ingredients = _choosenIngredients;
-      foodItem.optional = _choosenExtraIngredients;
-      foodItem.description = _shortDescriptionController.text.trim();
-      foodItem.moreInfo = _moreInfoController.text.trim();
-
-      Provider.of<FoodItem>(context, listen: false)
-          .updateFoodItem(foodItem)
-          .then((value) {
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            SHome.routeName, ModalRoute.withName(SHome.routeName));
-      }).catchError((error) {
-        print(error);
-      });
-    } else {
-      print('Please Fill Mandatory Fields');
+    if (foodItem.imageUrl[0] == null) {
+      showErrorDialog('Please upload atleast 1 image.', context);
+      return;
     }
+
+    if (_foodNameController.text.isEmpty) {
+      showErrorDialog('Please provide food item name!', context);
+      return;
+    }
+
+    if (_foodPriceController.text.isEmpty) {
+      showErrorDialog('Please provide the price of the item!', context);
+      return;
+    }
+
+    if (_choosenCategories.isEmpty) {
+      showErrorDialog('Please choose categories', context);
+      return;
+    }
+    if (_choosenIngredients.isEmpty) {
+      showErrorDialog('Please choose included ingredients', context);
+      return;
+    }
+
+    if (_shortDescriptionController.text.isEmpty) {
+      showErrorDialog('Please provide a description!', context);
+      return;
+    }
+
+    if (_moreInfoController.text.isEmpty) {
+      showErrorDialog('Please provide more information!', context);
+      return;
+    }
+
+    setState(() {
+      _choosenExtraIngredients.isNotEmpty
+          ? foodItem.isCustomizable = true
+          : foodItem.isCustomizable = false;
+      _isLoading = true;
+    });
+
+    if (_choosenFile0 != null) {
+      foodItem.imageUrl[0] = await putFile(_choosenFile0);
+    }
+    if (_choosenFile1 != null) {
+      foodItem.imageUrl[1] = await putFile(_choosenFile1);
+    }
+    if (_choosenFile2 != null) {
+      foodItem.imageUrl[2] = await putFile(_choosenFile2);
+    }
+    if (_choosenFile3 != null) {
+      foodItem.imageUrl[3] = await putFile(_choosenFile3);
+    }
+
+    if (_choosenExtraIngredients.isNotEmpty) {
+      _choosenExtraIngredients.updateAll((key, value) => value = false);
+    }
+
+    foodItem.foodName = _foodNameController.text.trim();
+    foodItem.price = _foodPriceController.text.trim();
+    foodItem.category = _choosenCategories;
+    foodItem.ingredients = _choosenIngredients;
+    foodItem.optional = _choosenExtraIngredients;
+    foodItem.description = _shortDescriptionController.text.trim();
+    foodItem.moreInfo = _moreInfoController.text.trim();
+
+    Provider.of<FoodItem>(context, listen: false)
+        .updateFoodItem(foodItem)
+        .then((value) {
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          SHome.routeName, ModalRoute.withName(SHome.routeName));
+    }).catchError((error) {
+      print(error);
+    });
   }
 
   void addCategoryToFirebase() async {
@@ -639,16 +672,36 @@ class _SEditItemsState extends State<SEditItems> {
                                     ],
                                   ),
                                   buildHeightSizedBox(mediaQuery),
-                                  buildBoolBox(
-                                    value: foodItem.isAvailable,
-                                    mediaQuery: mediaQuery,
-                                    title: 'Available',
-                                    onTap: () {
-                                      setState(() {
-                                        foodItem.isAvailable =
-                                            !foodItem.isAvailable;
-                                      });
-                                    },
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: buildBoolBox(
+                                          value: foodItem.isAvailable,
+                                          mediaQuery: mediaQuery,
+                                          title: 'Available',
+                                          onTap: () {
+                                            setState(() {
+                                              foodItem.isAvailable =
+                                                  !foodItem.isAvailable;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      buildWidthSizedBox(mediaQuery),
+                                      Expanded(
+                                        child: buildBoolBox(
+                                          value: foodItem.isCustomizable,
+                                          mediaQuery: mediaQuery,
+                                          title: 'Customizable',
+                                          onTap: () {
+                                            setState(() {
+                                              foodItem.isCustomizable =
+                                                  !foodItem.isCustomizable;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -711,14 +764,6 @@ class _SEditItemsState extends State<SEditItems> {
                                                     .elementAt(index), (value) {
                                               return value = !value;
                                             });
-                                            _timingToDisplay.clear();
-                                            foodItem.timing
-                                                .forEach((key, value) {
-                                              if (value == true) {
-                                                _timingToDisplay.putIfAbsent(
-                                                    key, () => value);
-                                              }
-                                            });
                                           });
                                         },
                                         child: CContainer(
@@ -759,28 +804,6 @@ class _SEditItemsState extends State<SEditItems> {
                             )
                           ],
                         ),
-                        if (_timingToDisplay.isNotEmpty)
-                          buildHeightSizedBox(mediaQuery),
-                        if (_timingToDisplay.isNotEmpty)
-                          buildGridContainer(
-                            isBoxShadow: false,
-                            child: CGridView(
-                              itemCount: _timingToDisplay.length,
-                              padding: EdgeInsets.only(left: 15, right: 15),
-                              itemBuilder: (context, index) {
-                                return CContainer(
-                                  borderRadius: BorderRadius.circular(30),
-                                  backgroundColor: fontColor,
-                                  child: CText(
-                                    fontSize: 13,
-                                    text:
-                                        _timingToDisplay.keys.elementAt(index),
-                                    textColor: Colors.white,
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
                         buildHeightSizedBox(mediaQuery),
                         Stack(
                           children: [
@@ -805,14 +828,11 @@ class _SEditItemsState extends State<SEditItems> {
                                                   !_categoriesList[index].value;
 
                                               _choosenCategories.clear();
-                                              _categoriesToDisplay.clear();
                                               _categoriesList
                                                   .forEach((element) {
                                                 if (element.value) {
                                                   _choosenCategories
                                                       .add(element.categoryId);
-                                                  _categoriesToDisplay.add(
-                                                      element.categoryName);
                                                 }
                                               });
                                             });
@@ -900,28 +920,6 @@ class _SEditItemsState extends State<SEditItems> {
                               )
                             ],
                           ),
-                        if (_categoriesToDisplay.isNotEmpty)
-                          buildHeightSizedBox(mediaQuery),
-                        if (_categoriesToDisplay.isNotEmpty)
-                          buildGridContainer(
-                            width: mediaQuery.width,
-                            isBoxShadow: false,
-                            child: CGridView(
-                              itemCount: _categoriesToDisplay.length,
-                              padding: EdgeInsets.only(left: 15, right: 15),
-                              itemBuilder: (context, index) {
-                                return CContainer(
-                                  borderRadius: BorderRadius.circular(30),
-                                  backgroundColor: fontColor,
-                                  child: CText(
-                                    fontSize: 13,
-                                    text: _categoriesToDisplay[index],
-                                    textColor: Colors.white,
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
                         buildHeightSizedBox(mediaQuery),
                         Stack(
                           children: [
@@ -943,25 +941,32 @@ class _SEditItemsState extends State<SEditItems> {
                                         return GestureDetector(
                                           onTap: () {
                                             setState(() {
-                                              _ingredientsList[index].value =
-                                                  !_ingredientsList[index]
-                                                      .value;
+                                              if (!_extraIngredientsList[index]
+                                                  .value) {
+                                                _ingredientsList[index].value =
+                                                    !_ingredientsList[index]
+                                                        .value;
 
-                                              _ingredientsToDisplay.clear();
-                                              _ingredientsList
-                                                  .forEach((element) {
-                                                if (element.value) {
-                                                  _ingredientsToDisplay
-                                                      .add(element);
-                                                }
-                                              });
-                                              _choosenIngredients.clear();
-                                              _ingredientsToDisplay
-                                                  .forEach((element) {
-                                                _choosenIngredients.putIfAbsent(
-                                                    element.id,
-                                                    () => element.value);
-                                              });
+                                                _choosenIngredients.clear();
+                                                _ingredientsList
+                                                    .forEach((element) {
+                                                  if (element.value)
+                                                    _choosenIngredients
+                                                        .putIfAbsent(
+                                                      element.id,
+                                                      () => element.value,
+                                                    );
+                                                });
+                                              } else {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (ctx) => DialogBox(
+                                                    title:
+                                                        'Ingredient already added !',
+                                                    isError: true,
+                                                  ),
+                                                );
+                                              }
                                             });
                                           },
                                           child: CContainer(
@@ -993,7 +998,7 @@ class _SEditItemsState extends State<SEditItems> {
                                 buildCContainer(
                                   width: mediaQuery.width * 0.8,
                                   child: CDropdownRow(
-                                    title: 'Ingredients',
+                                    title: 'Included Ingredients',
                                     codePoint: 0xe901,
                                     isExpanded: isIngredientsExpanded,
                                     fontFamily: 'wrenchIcon',
@@ -1044,29 +1049,6 @@ class _SEditItemsState extends State<SEditItems> {
                               )
                             ],
                           ),
-                        if (_ingredientsToDisplay.isNotEmpty)
-                          buildHeightSizedBox(mediaQuery),
-                        if (_ingredientsToDisplay.isNotEmpty)
-                          buildGridContainer(
-                            width: mediaQuery.width,
-                            isBoxShadow: false,
-                            child: CGridView(
-                              isBoxShadow: false,
-                              itemCount: _ingredientsToDisplay.length,
-                              padding: EdgeInsets.only(left: 15, right: 15),
-                              itemBuilder: (context, index) {
-                                return CContainer(
-                                  borderRadius: BorderRadius.circular(30),
-                                  backgroundColor: fontColor,
-                                  child: CText(
-                                    fontSize: 13,
-                                    text: _ingredientsToDisplay[index].name,
-                                    textColor: Colors.white,
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
                         buildHeightSizedBox(mediaQuery),
                         Stack(
                           children: [
@@ -1088,28 +1070,40 @@ class _SEditItemsState extends State<SEditItems> {
                                         return GestureDetector(
                                           onTap: () {
                                             setState(() {
-                                              _extraIngredientsList[index]
-                                                      .value =
-                                                  !_extraIngredientsList[index]
-                                                      .value;
+                                              if (!_ingredientsList[index]
+                                                  .value) {
+                                                _extraIngredientsList[index]
+                                                        .value =
+                                                    !_extraIngredientsList[
+                                                            index]
+                                                        .value;
 
-                                              _extraIngredientsToDisplay
-                                                  .clear();
-                                              _extraIngredientsList
-                                                  .forEach((element) {
-                                                if (element.value) {
-                                                  _extraIngredientsToDisplay
-                                                      .add(element);
-                                                }
-                                              });
-                                              _choosenExtraIngredients.clear();
-                                              _extraIngredientsToDisplay
-                                                  .forEach((element) {
                                                 _choosenExtraIngredients
-                                                    .putIfAbsent(element.id,
-                                                        () => element.value);
-                                              });
-                                              print(_choosenExtraIngredients);
+                                                    .clear();
+                                                _extraIngredientsList
+                                                    .forEach((element) {
+                                                  if (element.value)
+                                                    _choosenExtraIngredients
+                                                        .putIfAbsent(
+                                                            element.id,
+                                                            () =>
+                                                                element.value);
+                                                });
+                                              } else {
+                                                showDialog(
+                                                    context: context,
+                                                    builder: (ctx) => DialogBox(
+                                                          title:
+                                                              'Ingredient already added !',
+                                                          isError: true,
+                                                        ));
+                                              }
+                                              _choosenExtraIngredients
+                                                      .isNotEmpty
+                                                  ? foodItem.isCustomizable =
+                                                      true
+                                                  : foodItem.isCustomizable =
+                                                      false;
                                             });
                                           },
                                           child: Stack(
@@ -1263,79 +1257,6 @@ class _SEditItemsState extends State<SEditItems> {
                                         .checkmark_alt_circle_fill),
                               ),
                             ],
-                          ),
-                        if (_extraIngredientsToDisplay.isNotEmpty)
-                          buildHeightSizedBox(mediaQuery),
-                        if (_extraIngredientsToDisplay.isNotEmpty)
-                          buildGridContainer(
-                            isBoxShadow: false,
-                            child: CGridView(
-                              childAspectRatio: 1 / 0.45,
-                              isBoxShadow: false,
-                              itemCount: _extraIngredientsToDisplay.length,
-                              padding: EdgeInsets.only(left: 15, right: 15),
-                              itemBuilder: (context, index) {
-                                return Stack(
-                                  children: [
-                                    CContainer(
-                                        height: null,
-                                        padding: EdgeInsets.only(bottom: 2),
-                                        alignment: Alignment.bottomCenter,
-                                        borderRadius: BorderRadius.circular(13),
-                                        isBoxShadow: false,
-                                        backgroundColor:
-                                            fontColor.withOpacity(0.35),
-                                        child: _extraIngredientsToDisplay[index]
-                                                    .price !=
-                                                null
-                                            ? CText(
-                                                fontSize: 13,
-                                                textAlign: TextAlign.center,
-                                                text: 'Rs ' +
-                                                    _extraIngredientsToDisplay[
-                                                            index]
-                                                        .price,
-                                                textColor: fontColor,
-                                              )
-                                            : GestureDetector(
-                                                onTap: () {
-                                                  setState(() {
-                                                    isAddExtraIngredient = true;
-                                                    _addExtraIngredientNameController
-                                                            .text =
-                                                        _extraIngredientsToDisplay[
-                                                                index]
-                                                            .name;
-                                                  });
-                                                },
-                                                child: CText(
-                                                  fontSize: 13,
-                                                  textAlign: TextAlign.center,
-                                                  text: 'Add Price',
-                                                  textColor: Colors.white,
-                                                ),
-                                              )),
-                                    Padding(
-                                      padding: EdgeInsets.only(bottom: 18),
-                                      child: CContainer(
-                                        height: null,
-                                        borderRadius: BorderRadius.circular(30),
-                                        isBoxShadow: false,
-                                        backgroundColor: fontColor,
-                                        child: CText(
-                                          fontSize: 13,
-                                          textAlign: TextAlign.center,
-                                          text:
-                                              _extraIngredientsToDisplay[index]
-                                                  .name,
-                                          textColor: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            ),
                           ),
                         buildHeightSizedBox(mediaQuery),
                         buildCContainer(

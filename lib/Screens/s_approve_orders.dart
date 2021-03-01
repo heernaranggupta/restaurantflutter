@@ -79,15 +79,15 @@ class _SApproveOrdersState extends State<SApproveOrders> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               CText(
-                                  text: DateFormat('LLLL D, yyyy')
+                                  text: DateFormat('LLLL dd, yyyy')
                                       .format(DateTime.now())),
                               StreamBuilder(
                                 stream:
-                                    Stream.periodic(const Duration(seconds: 1)),
+                                    Stream.periodic(const Duration(minutes: 1)),
                                 builder: (BuildContext context,
                                     AsyncSnapshot<dynamic> snapshot) {
                                   return CText(
-                                      text: DateFormat('hh:mm:ss a')
+                                      text: DateFormat('hh:mm a')
                                           .format(DateTime.now()));
                                 },
                               ),
