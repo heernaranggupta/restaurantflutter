@@ -189,7 +189,7 @@ class _ApprovedOrdersState extends State<ApprovedOrders> {
                           // widget.update();
                           await Orders().updateOrder(
                               widget._approvedOrders[widget.index].docId, false)
-                              .then((value) => ScaffoldMessenger.of(context)
+                              .then((value) => Scaffold.of(context)
                               ..removeCurrentSnackBar()..showSnackBar(SnackBar(content: Text('Order ${widget._approvedOrders[widget.index].orderId} is removed.'))));
                           // widget.update();
                         },

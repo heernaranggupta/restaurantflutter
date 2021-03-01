@@ -102,7 +102,7 @@ class _ApproveOrdersState extends State<ApproveOrders> {
                                     widget._yetToApproveOrders[widget.index].orderId
                                         .toString(),
                                     widget._yetToApproveOrders[widget.index].order,
-                                    i).then((_) => ScaffoldMessenger.of(context)
+                                    i).then((_) => Scaffold.of(context)
                                   ..removeCurrentSnackBar()
                                     ..showSnackBar(
                                     SnackBar(
@@ -238,7 +238,7 @@ class _ApproveOrdersState extends State<ApproveOrders> {
                                 // widget.update();
                                 await Orders().updateOrder(
                                     widget._yetToApproveOrders[widget.index].docId,
-                                    true).then((_) => ScaffoldMessenger.of(context)..removeCurrentSnackBar()
+                                    true).then((_) => Scaffold.of(context)..removeCurrentSnackBar()
                                     ..showSnackBar(SnackBar(content: Text('Order ${widget._yetToApproveOrders[widget.index].orderId} is approved.'))));
                                 // widget.update();
                               },
@@ -259,7 +259,7 @@ class _ApproveOrdersState extends State<ApproveOrders> {
                                 // widget.update();
                                 await Orders().deleteOrder(
                                   widget._yetToApproveOrders[widget.index].docId,
-                                ).then((_) => ScaffoldMessenger.of(context)..removeCurrentSnackBar()
+                                ).then((_) => Scaffold.of(context)..removeCurrentSnackBar()
                                     ..showSnackBar(SnackBar(content: Text('Order ${widget._yetToApproveOrders[widget.index].orderId} is deleted.'))));
                                 // widget.update();
                               },
