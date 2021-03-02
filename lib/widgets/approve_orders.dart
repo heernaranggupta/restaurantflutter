@@ -12,7 +12,6 @@ import '../constants.dart';
 import 'approved_orders.dart';
 
 class ApproveOrders extends StatefulWidget {
-
   List<Orders> _yetToApproveOrders;
   Function update;
   int index;
@@ -44,15 +43,18 @@ class _ApproveOrdersState extends State<ApproveOrders> {
           child: ConstrainedBox(
             constraints: BoxConstraints(
                 maxHeight:
-                    widget._yetToApproveOrders[widget.index].order.length * 180.0 +
+                    widget._yetToApproveOrders[widget.index].order.length *
+                            180.0 +
                         50),
             child: ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 padding: EdgeInsets.only(top: 120),
-                itemCount: widget._yetToApproveOrders[widget.index].order.length,
+                itemCount:
+                    widget._yetToApproveOrders[widget.index].order.length,
                 itemBuilder: (context, i) {
-                  final order = widget._yetToApproveOrders[widget.index].order[i];
+                  final order =
+                      widget._yetToApproveOrders[widget.index].order[i];
 
                   return Stack(
                     children: [
@@ -98,16 +100,21 @@ class _ApproveOrdersState extends State<ApproveOrders> {
                                 )),
                             GestureDetector(
                               onTap: () async {
-                                await Orders().deleteParticularOrder(
-                                    widget._yetToApproveOrders[widget.index].docId,
-                                    widget._yetToApproveOrders[widget.index].orderId
-                                        .toString(),
-                                    widget._yetToApproveOrders[widget.index].order,
-                                    i).then((_) => Scaffold.of(context)
-                                  ..removeCurrentSnackBar()
-                                    ..showSnackBar(
-                                    SnackBar(
-                                        content: Text('${widget._yetToApproveOrders[widget.index].order[i]['foodName']} from Order ${widget._yetToApproveOrders[widget.index].orderId} is deleted.'))));
+                                await Orders()
+                                    .deleteParticularOrder(
+                                        widget._yetToApproveOrders[widget.index]
+                                            .docId,
+                                        widget._yetToApproveOrders[widget.index]
+                                            .orderId
+                                            .toString(),
+                                        widget._yetToApproveOrders[widget.index]
+                                            .order,
+                                        i)
+                                    .then((_) => Scaffold.of(context)
+                                      ..removeCurrentSnackBar()
+                                      ..showSnackBar(SnackBar(
+                                          content: Text(
+                                              '${widget._yetToApproveOrders[widget.index].order[i]['foodName']} from Order ${widget._yetToApproveOrders[widget.index].orderId} is deleted.'))));
                               },
                               child: Container(
                                 height: 100,
@@ -165,7 +172,8 @@ class _ApproveOrdersState extends State<ApproveOrders> {
                             topLeft: Radius.circular(10),
                             bottomLeft: Radius.circular(10)),
                         child: CText(
-                            text: widget._yetToApproveOrders[widget.index].table.toString()),
+                            text: widget._yetToApproveOrders[widget.index].table
+                                .toString()),
                         width: mediaQuery.width * 0.1,
                       ),
                       Expanded(
@@ -187,14 +195,16 @@ class _ApproveOrdersState extends State<ApproveOrders> {
                                     children: [
                                       CText(
                                         text: widget
-                                            ._yetToApproveOrders[widget.index].orderId
+                                            ._yetToApproveOrders[widget.index]
+                                            .orderId
                                             .toString(),
                                         fontWeight: FontWeight.bold,
                                       ),
                                       SizedBox(height: 5),
                                       CText(
                                         text: widget
-                                            ._yetToApproveOrders[widget.index].time,
+                                            ._yetToApproveOrders[widget.index]
+                                            .time,
                                         maxLines: 2,
                                         fontWeight: FontWeight.normal,
                                       ),
@@ -216,18 +226,23 @@ class _ApproveOrdersState extends State<ApproveOrders> {
                                   width: mediaQuery.width * 0.1,
                                   child: CText(
                                     text: widget
-                                        ._yetToApproveOrders[widget.index].order.length
+                                        ._yetToApproveOrders[widget.index]
+                                        .order
+                                        .length
                                         .toString(),
                                   )),
-                              CContainer(
-                                height: null,
-                                backgroundColor: fontColor,
-                                borderRadius: BorderRadius.circular(10),
-                                width: mediaQuery.width * 0.22,
-                                alignment: Alignment.center,
-                                child: CText(
-                                  text: 'Ordered',
-                                  textColor: Colors.white,
+                              Padding(
+                                padding: const EdgeInsets.only(right: 5),
+                                child: CContainer(
+                                  height: null,
+                                  backgroundColor: fontColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                  width: mediaQuery.width * 0.22,
+                                  alignment: Alignment.center,
+                                  child: CText(
+                                    text: 'Ordered',
+                                    textColor: Colors.white,
+                                  ),
                                 ),
                               )
                             ],
@@ -237,59 +252,72 @@ class _ApproveOrdersState extends State<ApproveOrders> {
                             GestureDetector(
                               onTap: () async {
                                 // widget.update();
-                                await Orders().updateOrder(
-                                    widget._yetToApproveOrders[widget.index].docId,
-                                    true).then((_) => Scaffold.of(context)..removeCurrentSnackBar()
-                                    ..showSnackBar(SnackBar(content: Text('Order ${widget._yetToApproveOrders[widget.index].orderId} is approved.'))));
-                                Navigator.of(context).popAndPushNamed(SApproveOrders.routeName);
+                                await Orders()
+                                    .updateOrder(
+                                        widget._yetToApproveOrders[widget.index]
+                                            .docId,
+                                        true)
+                                    .then((_) => Scaffold.of(context)
+                                      ..removeCurrentSnackBar()
+                                      ..showSnackBar(SnackBar(
+                                          content: Text(
+                                              'Order ${widget._yetToApproveOrders[widget.index].orderId} is approved.'))));
+                                Navigator.of(context)
+                                    .popAndPushNamed(SApproveOrders.routeName);
                                 // widget.update();
                               },
-                              child: CContainer(
-                                height: null,
-                                backgroundColor: fontColor,
-                                borderRadius: BorderRadius.circular(10),
-                                width: mediaQuery.width * 0.22,
-                                alignment: Alignment.center,
-                                child: CText(
-                                  text: 'Approve',
-                                  textColor: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 5),
+                                child: CContainer(
+                                  isBoxShadow: false,
+                                  height: null,
+                                  backgroundColor: fontColor,
+                                  borderRadius: BorderRadius.circular(10),
+                                  width: mediaQuery.width * 0.22,
+                                  alignment: Alignment.center,
+                                  child: CText(
+                                    text: 'Approve',
+                                    textColor: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
                             GestureDetector(
                               onTap: () async {
                                 // widget.update();
-                                await Orders().deleteOrder(
-                                  widget._yetToApproveOrders[widget.index].docId,
-                                ).then((_) => Scaffold.of(context)..removeCurrentSnackBar()
-                                    ..showSnackBar(SnackBar(content: Text('Order ${widget._yetToApproveOrders[widget.index].orderId} is deleted.'))));
+                                await Orders()
+                                    .deleteOrder(
+                                      widget._yetToApproveOrders[widget.index]
+                                          .docId,
+                                    )
+                                    .then((_) => Scaffold.of(context)
+                                      ..removeCurrentSnackBar()
+                                      ..showSnackBar(SnackBar(
+                                          content: Text(
+                                              'Order ${widget._yetToApproveOrders[widget.index].orderId} is deleted.'))));
                                 // widget.update();
                               },
-                              child: Container(
-                                height: null,
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.white,
-                                      offset: Offset(-3, -3),
-                                      blurRadius: 4,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 5),
+                                child: Container(
+                                  height: null,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.bottomLeft,
+                                      end: Alignment.topRight,
+                                      colors: <Color>[
+                                        Color(0xFFFF7D55),
+                                        Color(0xFFF4197E),
+                                      ],
                                     ),
-                                  ],
-                                  gradient: LinearGradient(
-                                    begin: Alignment.bottomLeft,
-                                    end: Alignment.topRight,
-                                    colors: <Color>[
-                                      Color(0xFFFF7D55),
-                                      Color(0xFFF4197E),
-                                    ],
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                width: mediaQuery.width * 0.22,
-                                alignment: Alignment.center,
-                                child: CText(
-                                  text: 'Remove',
-                                  textColor: Colors.white,
+                                  width: mediaQuery.width * 0.22,
+                                  alignment: Alignment.center,
+                                  child: CText(
+                                    text: 'Remove',
+                                    textColor: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
