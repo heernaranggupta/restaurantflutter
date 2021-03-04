@@ -11,12 +11,14 @@ class CBottomBarButton extends StatelessWidget {
   CBottomBarButton({@required this.title, this.onPressed});
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      child: CupertinoButton(
-        color: fontColor,
-        child: CText(text: title ?? 'No Title', textColor: Colors.white),
-        onPressed: onPressed,
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        child: CupertinoButton(
+          color: fontColor,
+          child: CText(text: title ?? 'No Title', textColor: Colors.white),
+          onPressed: onPressed,
+        ),
       ),
     );
   }
